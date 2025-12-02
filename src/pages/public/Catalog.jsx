@@ -109,7 +109,7 @@ const Catalog = () => {
           {/* Mobile Filter Button */}
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="lg:hidden flex items-center space-x-2 px-4 py-2 bg-primary-600 text-white rounded-lg"
+            className="lg:hidden flex items-center space-x-2 px-4 py-2 bg-cyan-600 text-white rounded-lg"
           >
             <Filter className="w-5 h-5" />
             <span>Filtros</span>
@@ -143,7 +143,7 @@ const Catalog = () => {
                   value={filters.search}
                   onChange={(e) => handleFilterChange('search', e.target.value)}
                   placeholder="Buscar productos..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 />
               </div>
 
@@ -155,7 +155,7 @@ const Catalog = () => {
                 <select
                   value={filters.style}
                   onChange={(e) => handleFilterChange('style', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 >
                   <option value="">Todos</option>
                   {styles.map(style => (
@@ -172,7 +172,7 @@ const Catalog = () => {
                 <select
                   value={filters.gender}
                   onChange={(e) => handleFilterChange('gender', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 >
                   <option value="">Todos</option>
                   {genders.map(gender => (
@@ -189,7 +189,7 @@ const Catalog = () => {
                 <select
                   value={filters.climate}
                   onChange={(e) => handleFilterChange('climate', e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 >
                   <option value="">Todos</option>
                   {climates.map(climate => (
@@ -265,7 +265,7 @@ const Catalog = () => {
                       </h3>
                       <div className="flex items-center gap-2 mb-2">
                         {product.style && (
-                          <span className="text-xs px-2 py-1 bg-primary-100 text-primary-700 rounded-full">
+                          <span className="text-xs px-2 py-1 bg-cyan-100 text-cyan-700 rounded-full">
                             {product.style}
                           </span>
                         )}
@@ -278,7 +278,7 @@ const Catalog = () => {
                       <p className="text-gray-600 text-sm mb-2">
                         {product.gender}
                       </p>
-                      <p className="text-primary-600 font-bold text-xl">
+                      <p className="text-cyan-600 font-bold text-xl">
                         ${product.price?.toLocaleString()}
                       </p>
                       {product.stock < 5 && product.stock > 0 && (

@@ -51,20 +51,22 @@ const Header = () => {
   return (
     <header className="bg-gradient-to-r from-slate-800 via-teal-900 to-slate-800 border-b border-teal-700/50 shadow-lg sticky top-0 z-40">
       <div className="container-custom">
-        <div className="flex items-center justify-between h-20 md:h-24">
+        <div className="flex items-center justify-between h-20 md:h-24 gap-2 md:gap-4">
           {/* Logo */}
-          <Link to="/" className="flex items-center mr-4 md:mr-8">
-            <img
-              src="/src/assets/logoKevin2.png"
-              alt="Cloufit logo"
-              className="h-16 w-auto md:h-20 object-contain"
-            />
+          <Link to="/" className="flex items-center flex-shrink-0">
+            <div className="bg-white/15 backdrop-blur-md rounded-lg px-2.5 py-1.5 md:px-3 md:py-2 border border-white/30 shadow-md">
+              <img
+                src="/src/assets/logoKevin2.png"
+                alt="Cloufit logo"
+                className="h-10 w-auto md:h-14 object-contain"
+              />
+            </div>
           </Link>
 
           {/* Search Bar - Desktop */}
           <form
             onSubmit={handleSearch}
-            className="hidden md:flex flex-1 max-w-md mx-8 lg:mx-12"
+            className="hidden md:flex flex-1 max-w-md mx-4 lg:mx-6"
           >
             <div className="relative w-full">
               <input
@@ -79,7 +81,7 @@ const Header = () => {
           </form>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8 ml-4">
+          <nav className="hidden lg:flex items-center space-x-6 ml-2">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
@@ -92,7 +94,7 @@ const Header = () => {
           </nav>
 
           {/* Actions */}
-          <div className="flex items-center space-x-3 md:space-x-5 ml-4">
+          <div className="flex items-center space-x-2 md:space-x-3 ml-2 flex-shrink-0">
             {/* AI Button */}
             <Link
               to="/ai-assistant"

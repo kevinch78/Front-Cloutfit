@@ -30,7 +30,7 @@ const Input = forwardRef(({
             w-full px-4 py-3 text-sm md:text-base
             ${icon ? 'pl-10' : 'pl-4'}
             border rounded-lg
-            ${error ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-primary-500'}
+            ${error ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-cyan-500'}
             focus:outline-none focus:ring-2 focus:border-transparent
             transition-all duration-300 bg-white
             ${className}

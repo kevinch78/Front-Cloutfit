@@ -6,7 +6,7 @@
 /* Estilos globales personalizados */
 @layer base {
   body {
-    @apply bg-gray-50 text-gray-900 antialiased;
+    @apply bg-slate-50 text-gray-900 antialiased;
   }
   
   * {
@@ -17,21 +17,21 @@
 @layer components {
   /* Botón primario */
   .btn-primary {
-    @apply bg-gradient-to-r from-primary-600 to-primary-700 text-white px-6 py-3 rounded-lg 
+    @apply bg-gradient-to-r from-cyan-600 to-cyan-500 text-white px-6 py-3 rounded-lg 
            hover:scale-105 transition-all duration-300 shadow-lg font-medium
            disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100;
   }
 
   /* Botón secundario */
   .btn-secondary {
-    @apply bg-white text-primary-600 border-2 border-primary-600 px-6 py-3 rounded-lg 
-           hover:bg-primary-50 transition-all duration-300 font-medium;
+    @apply bg-white text-cyan-600 border-2 border-cyan-600 px-6 py-3 rounded-lg 
+           hover:bg-cyan-50 transition-all duration-300 font-medium;
   }
 
   /* Input personalizado */
   .input-field {
     @apply w-full px-4 py-3 border border-gray-300 rounded-lg 
-           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
+           focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent
            transition-all duration-300 bg-white;
   }
 
@@ -73,12 +73,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #a855f7;
+  background: #0891b2;
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #9333ea;
+  background: #06b6d4;
 }
 /* Animaciones para el modal */
 @keyframes fade-in {
@@ -135,10 +135,10 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(147, 51, 234, 0.3);
+  background: rgba(8, 145, 178, 0.3);
   border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(147, 51, 234, 0.5);
+  background: rgba(8, 145, 178, 0.5);
 }

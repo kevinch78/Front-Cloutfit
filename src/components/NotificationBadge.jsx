@@ -158,7 +158,7 @@ const NotificationBadge = ({ isInMenu = false, isMobile = false, onClick }) => {
                     if (onClick) onClick();
                 }}
                 className={`w-full flex items-center justify-between px-4 py-3 transition-colors ${isMobile
-                        ? 'text-white hover:bg-primary-700 rounded-lg'
+                        ? 'text-white hover:bg-cyan-700 rounded-lg'
                         : 'text-gray-700 hover:bg-gray-100'
                     }`}
             >
@@ -179,7 +179,7 @@ const NotificationBadge = ({ isInMenu = false, isMobile = false, onClick }) => {
         <div className="relative" ref={dropdownRef}>
             <button
                 onClick={handleToggleDropdown}
-                className="relative p-2 text-white hover:bg-primary-600 rounded-lg transition-colors"
+                className="relative p-2 text-white hover:bg-cyan-600 rounded-lg transition-colors"
                 aria-label="Notificaciones"
             >
                 <Bell className="w-6 h-6" />
@@ -260,7 +260,7 @@ const NotificationBadge = ({ isInMenu = false, isMobile = false, onClick }) => {
                                     navigate('/notifications');
                                     setIsOpen(false);
                                 }}
-                                className="w-full text-center text-sm text-primary-600 hover:text-primary-700 font-medium"
+                                className="w-full text-center text-sm text-cyan-600 hover:text-cyan-700 font-medium"
                             >
                                 Ver todas las notificaciones
                             </button>

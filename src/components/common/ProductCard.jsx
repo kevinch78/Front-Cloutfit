@@ -82,14 +82,14 @@ const ProductCard = ({ product, showActions = true }) => {
         </div>
 
         {/* Información del Producto */}
-        <h3 className="font-semibold text-lg mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors">
+        <h3 className="font-semibold text-lg mb-2 line-clamp-2 group-hover:text-cyan-600 transition-colors">
           {product.name}
         </h3>
 
         {/* Tags */}
         <div className="flex items-center gap-2 mb-2 flex-wrap">
           {product.style && (
-            <span className="text-xs px-2 py-1 bg-primary-100 text-primary-700 rounded-full">
+            <span className="text-xs px-2 py-1 bg-cyan-100 text-cyan-700 rounded-full">
               {product.style}
             </span>
           )}
@@ -99,14 +99,14 @@ const ProductCard = ({ product, showActions = true }) => {
             </span>
           )}
           {product.gender && (
-            <span className="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded-full">
+            <span className="text-xs px-2 py-1 bg-teal-100 text-teal-700 rounded-full">
               {product.gender}
             </span>
           )}
         </div>
 
         {/* Precio */}
-        <p className="text-primary-600 font-bold text-xl mb-3">
+        <p className="text-cyan-600 font-bold text-xl mb-3">
           ${product.price?.toLocaleString()}
         </p>
       </div>

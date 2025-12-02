@@ -56,11 +56,11 @@ const MyCloset = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-purple-50 to-pink-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-cyan-50 to-teal-50 py-8">
       <div className="container-custom max-w-7xl">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-600 to-purple-600 rounded-2xl mb-4 shadow-lg">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-cyan-600 to-teal-600 rounded-2xl mb-4 shadow-lg">
             <span className="text-3xl">👔</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
@@ -156,7 +156,7 @@ const MyCloset = () => {
                         </span>
                       )}
                       {outfit.style && (
-                        <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full font-medium">
+                        <span className="text-xs bg-teal-100 text-teal-800 px-2 py-1 rounded-full font-medium">
                           {outfit.style}
                         </span>
                       )}
@@ -207,19 +207,19 @@ const MyCloset = () => {
             {/* Estadísticas del ropero */}
             <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-3xl mx-auto">
               <Card className="text-center">
-                <div className="text-3xl font-bold text-primary-600 mb-1">
+                <div className="text-3xl font-bold text-cyan-600 mb-1">
                   {outfits.length}
                 </div>
                 <p className="text-sm text-gray-600">Outfits guardados</p>
               </Card>
               <Card className="text-center">
-                <div className="text-3xl font-bold text-purple-600 mb-1">
+                <div className="text-3xl font-bold text-teal-600 mb-1">
                   {outfits.reduce((sum, o) => sum + (o.products?.length || 0), 0)}
                 </div>
                 <p className="text-sm text-gray-600">Prendas totales</p>
               </Card>
               <Card className="text-center">
-                <div className="text-3xl font-bold text-pink-600 mb-1">
+                <div className="text-3xl font-bold text-cyan-600 mb-1">
                   {outfits.filter(o => o.imageUrl).length}
                 </div>
                 <p className="text-sm text-gray-600">Con visualización IA</p>

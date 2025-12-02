@@ -26,7 +26,7 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary-600 via-primary-700 to-purple-800 text-white py-16 md:py-24 relative overflow-hidden">
+      <section className="bg-gradient-to-br from-slate-800 via-teal-900 to-slate-800 text-white py-16 md:py-24 relative overflow-hidden">
         {/* Decoraciones */}
         <div className="absolute top-0 left-0 w-64 h-64 bg-white opacity-5 rounded-full -translate-x-32 -translate-y-32"></div>
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-white opacity-5 rounded-full translate-x-32 translate-y-32"></div>
@@ -38,9 +38,9 @@ const Home = () => {
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight">
                 ¿Sin Ideas? ✨
                 <br />
-                <span className="text-primary-200">¡La IA Crea tu Outfit Perfecto!</span>
+                <span className="text-cyan-200">¡La IA Crea tu Outfit Perfecto!</span>
               </h1>
-              <p className="text-lg md:text-xl text-primary-100 mb-8">
+              <p className="text-lg md:text-xl text-gray-200 mb-8">
                 Encuentra combinaciones únicas para cualquier ocasión con nuestra inteligencia artificial. 🎨👔
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -49,7 +49,7 @@ const Home = () => {
                     variant="secondary"
                     size="lg"
                     icon={<Sparkles className="w-6 h-6" />}
-                    className="bg-white text-primary-600 hover:bg-primary-50"
+                    className="bg-white text-cyan-600 hover:bg-cyan-50"
                   >
                     Probar IA Gratis
                   </Button>
@@ -70,7 +70,7 @@ const Home = () => {
             <div className="hidden lg:block animate-fade-in animation-delay-400">
               <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-2xl">
                 <div className="flex items-center space-x-2 mb-4">
-                  <Sparkles className="w-6 h-6 text-primary-200" />
+                  <Sparkles className="w-6 h-6 text-cyan-200" />
                   <h3 className="text-xl font-bold">¡Crea tu Outfit Ideal!</h3>
                 </div>
                 
@@ -90,7 +90,7 @@ const Home = () => {
                   />
                 </div>
 
-                <button className="w-full bg-primary-600 text-white py-3 rounded-lg font-semibold hover:bg-primary-700 transition-all flex items-center justify-center space-x-2">
+                <button className="w-full bg-cyan-600 text-white py-3 rounded-lg font-semibold hover:bg-cyan-500 transition-all flex items-center justify-center space-x-2">
                   <Sparkles className="w-5 h-5" />
                   <span>Generar Outfit</span>
                 </button>
@@ -110,8 +110,8 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card hover>
               <div className="text-center">
-                <div className="w-16 h-16 bg-primary-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Sparkles className="w-8 h-8 text-primary-600" />
+                <div className="w-16 h-16 bg-cyan-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Sparkles className="w-8 h-8 text-cyan-600" />
                 </div>
                 <h3 className="text-xl font-bold mb-2">IA Inteligente</h3>
                 <p className="text-gray-600">
@@ -187,7 +187,7 @@ const Home = () => {
                     <p className="text-gray-600 text-sm mb-2 line-clamp-1">
                       {product.style}
                     </p>
-                    <p className="text-primary-600 font-bold text-xl">
+                    <p className="text-cyan-600 font-bold text-xl">
                       ${product.price?.toLocaleString()}
                     </p>
                   </Link>
@@ -199,12 +199,12 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-r from-primary-600 to-purple-600 text-white py-16 md:py-20">
+      <section className="bg-gradient-to-r from-cyan-600 to-teal-600 text-white py-16 md:py-20">
         <div className="container-custom text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             ¿Listo para Descubrir tu Estilo?
           </h2>
-          <p className="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-200 mb-8 max-w-2xl mx-auto">
             Únete a Cloufit y deja que nuestra IA te ayude a verte increíble todos los días
           </p>
           <Link to="/register">
@@ -212,7 +212,7 @@ const Home = () => {
               variant="secondary"
               size="lg"
               icon={<Sparkles className="w-6 h-6" />}
-              className="bg-white text-primary-600 hover:bg-primary-50"
+              className="bg-white text-cyan-600 hover:bg-cyan-50"
             >
               Comenzar Gratis
             </Button>
