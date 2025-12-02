@@ -59,7 +59,7 @@ const VendorDashboard = () => {
 
         {/* Info de la tienda del usuario */}
         {user?.storeId && (
-          <Card className="mb-8 bg-gradient-to-br from-primary-600 to-primary-700 text-white">
+          <Card className="mb-8 bg-gradient-to-br from-cyan-600 to-cyan-700 text-white">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center">
@@ -72,7 +72,7 @@ const VendorDashboard = () => {
                 </div>
               </div>
               <Link to={`/seller/store`}>
-                <Button variant="outline" className="bg-white text-primary-600 hover:bg-white/90">
+                <Button variant="outline" className="bg-white text-cyan-600 hover:bg-white/90">
                   <Edit className="w-4 h-4 mr-2" />
                   Editar Tienda
                 </Button>
@@ -94,8 +94,8 @@ const VendorDashboard = () => {
                   +2 esta semana
                 </p>
               </div>
-              <div className="w-12 h-12 bg-primary-100 rounded-xl flex items-center justify-center">
-                <Package className="w-6 h-6 text-primary-600" />
+              <div className="w-12 h-12 bg-cyan-100 rounded-xl flex items-center justify-center">
+                <Package className="w-6 h-6 text-cyan-600" />
               </div>
             </div>
           </Card>
@@ -140,9 +140,9 @@ const VendorDashboard = () => {
           <h2 className="text-xl font-bold mb-6">Acciones Rápidas</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Link to="/seller/CreateProduct">
-              <button className="w-full flex items-center space-x-4 p-4 border-2 border-gray-200 rounded-xl hover:border-primary-500 hover:bg-primary-50 transition-all group">
-                <div className="w-12 h-12 bg-primary-100 group-hover:bg-primary-600 rounded-lg flex items-center justify-center transition-colors">
-                  <Plus className="w-6 h-6 text-primary-600 group-hover:text-white" />
+              <button className="w-full flex items-center space-x-4 p-4 border-2 border-gray-200 rounded-xl hover:border-cyan-500 hover:bg-cyan-50 transition-all group">
+                <div className="w-12 h-12 bg-cyan-100 group-hover:bg-cyan-600 rounded-lg flex items-center justify-center transition-colors">
+                  <Plus className="w-6 h-6 text-cyan-600 group-hover:text-white" />
                 </div>
                 <div className="text-left">
                   <p className="font-semibold text-gray-900">Agregar Producto</p>
@@ -152,7 +152,7 @@ const VendorDashboard = () => {
             </Link>
 
             <Link to="/seller/MyProducts">
-              <button className="w-full flex items-center space-x-4 p-4 border-2 border-gray-200 rounded-xl hover:border-primary-500 hover:bg-primary-50 transition-all group">
+              <button className="w-full flex items-center space-x-4 p-4 border-2 border-gray-200 rounded-xl hover:border-cyan-500 hover:bg-cyan-50 transition-all group">
                 <div className="w-12 h-12 bg-blue-100 group-hover:bg-blue-600 rounded-lg flex items-center justify-center transition-colors">
                   <Eye className="w-6 h-6 text-blue-600 group-hover:text-white" />
                 </div>
@@ -164,9 +164,9 @@ const VendorDashboard = () => {
             </Link>
 
             <Link to="/seller/store">
-              <button className="w-full flex items-center space-x-4 p-4 border-2 border-gray-200 rounded-xl hover:border-primary-500 hover:bg-primary-50 transition-all group">
-                <div className="w-12 h-12 bg-purple-100 group-hover:bg-purple-600 rounded-lg flex items-center justify-center transition-colors">
-                  <Store className="w-6 h-6 text-purple-600 group-hover:text-white" />
+              <button className="w-full flex items-center space-x-4 p-4 border-2 border-gray-200 rounded-xl hover:border-cyan-500 hover:bg-cyan-50 transition-all group">
+                <div className="w-12 h-12 bg-cyan-100 group-hover:bg-cyan-600 rounded-lg flex items-center justify-center transition-colors">
+                  <Store className="w-6 h-6 text-cyan-600 group-hover:text-white" />
                 </div>
                 <div className="text-left">
                   <p className="font-semibold text-gray-900">Configurar Tienda</p>
@@ -191,19 +191,19 @@ const VendorDashboard = () => {
         </Card>
 
         {/* Tips para Vendedores */}
-        <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+        <Card className="bg-gradient-to-br from-cyan-50 to-teal-50 border-cyan-200">
           <h3 className="text-lg font-bold text-gray-900 mb-3">💡 Tips para Vendedores</h3>
           <ul className="space-y-2 text-sm text-gray-700">
             <li className="flex items-start">
-              <span className="text-primary-600 mr-2">•</span>
+              <span className="text-cyan-600 mr-2">•</span>
               <span>Agrega fotos de alta calidad para atraer más clientes</span>
             </li>
             <li className="flex items-start">
-              <span className="text-primary-600 mr-2">•</span>
+              <span className="text-cyan-600 mr-2">•</span>
               <span>Mantén tu inventario actualizado para evitar ventas fallidas</span>
             </li>
             <li className="flex items-start">
-              <span className="text-primary-600 mr-2">•</span>
+              <span className="text-cyan-600 mr-2">•</span>
               <span>Completa toda la información del producto para mejor posicionamiento</span>
             </li>
           </ul>

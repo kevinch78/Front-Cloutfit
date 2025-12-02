@@ -85,7 +85,7 @@ const ProductPage = () => {
         {/* Breadcrumb */}
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center space-x-2 text-gray-600 hover:text-primary-600 mb-6 transition-colors"
+          className="flex items-center space-x-2 text-gray-600 hover:text-cyan-600 mb-6 transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           <span>Volver</span>
@@ -122,7 +122,7 @@ const ProductPage = () => {
 
               <div className="flex items-center gap-2 mb-4">
                 {product.style && (
-                  <span className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">
+                  <span className="px-3 py-1 bg-cyan-100 text-cyan-700 rounded-full text-sm font-medium">
                     {product.style}
                   </span>
                 )}
@@ -132,14 +132,14 @@ const ProductPage = () => {
                   </span>
                 )}
                 {product.gender && (
-                  <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">
+                  <span className="px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-sm font-medium">
                     {product.gender}
                   </span>
                 )}
               </div>
 
               <div className="flex items-baseline gap-4 mb-6">
-                <span className="text-4xl font-bold text-primary-600">
+                <span className="text-4xl font-bold text-cyan-600">
                   ${product.price?.toLocaleString()}
                 </span>
                 {product.stock > 0 ? (

@@ -101,8 +101,8 @@ const AdminDashboard = () => {
                 <p className="text-sm text-gray-600 mb-1">Total Tiendas</p>
                 <p className="text-3xl font-bold text-gray-900">{stats.totalStores}</p>
               </div>
-              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                <Store className="w-6 h-6 text-purple-600" />
+              <div className="w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center">
+                <Store className="w-6 h-6 text-cyan-600" />
               </div>
             </div>
           </Card>
@@ -165,15 +165,15 @@ const AdminDashboard = () => {
                 <span className="text-gray-600">{stats.totalProducts} productos en catálogo</span>
               </div>
               <div className="flex items-center space-x-3 text-sm">
-                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-cyan-500 rounded-full"></div>
                 <span className="text-gray-600">{stats.totalStores} tiendas registradas</span>
               </div>
             </div>
           </Card>
 
-          <Card className="bg-gradient-to-br from-primary-600 to-primary-700 text-white">
+          <Card className="bg-gradient-to-br from-cyan-600 to-cyan-700 text-white">
             <h3 className="font-bold text-lg mb-3">Plataforma Cloufit</h3>
-            <p className="text-primary-100 text-sm mb-4">
+            <p className="text-cyan-100 text-sm mb-4">
               Sistema de moda inteligente con IA para crear outfits personalizados.
             </p>
             <div className="flex items-center space-x-2 text-sm">

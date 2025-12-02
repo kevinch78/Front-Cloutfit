@@ -5,11 +5,11 @@ const AIFloatingButton = () => {
     return (
         <Link
             to="/ai-assistant"
-            className="fixed bottom-6 right-6 z-50 group flex items-center justify-center w-14 h-14 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-full shadow-lg hover:shadow-2xl hover:scale-110 transition-all duration-300 ease-out"
+            className="fixed bottom-6 right-6 z-50 group flex items-center justify-center w-14 h-14 bg-gradient-to-r from-cyan-600 to-teal-600 text-white rounded-full shadow-lg hover:shadow-2xl hover:scale-110 transition-all duration-300 ease-out"
             title="Asistente de Moda IA"
         >
             {/* Efecto de pulso sutil para llamar la atención */}
-            <span className="absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-20 animate-ping group-hover:opacity-0"></span>
+            <span className="absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-20 animate-ping group-hover:opacity-0"></span>
 
             <Sparkles className="w-7 h-7 animate-pulse" />
 

@@ -79,7 +79,7 @@ const ReservationPage = () => {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container-custom max-w-5xl">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 flex items-center gap-3">
-          <Package className="w-8 h-8 text-primary-600" />
+          <Package className="w-8 h-8 text-cyan-600" />
           Mi Cesta de Reserva
         </h1>
 
@@ -103,8 +103,8 @@ const ReservationPage = () => {
               {storeGroups.map((storeGroup) => (
                 <div key={storeGroup.storeId}>
                   {/* Encabezado de la Tienda */}
-                  <div className="bg-primary-50 border-l-4 border-primary-600 px-4 py-3 mb-3 rounded-lg">
-                    <h3 className="font-semibold text-lg text-primary-900 flex items-center gap-2">
+                  <div className="bg-cyan-50 border-l-4 border-cyan-600 px-4 py-3 mb-3 rounded-lg">
+                    <h3 className="font-semibold text-lg text-teal-900 flex items-center gap-2">
                       
 🏪 {storeGroup.storeName}
                       <span className="text-sm font-normal text-gray-600">

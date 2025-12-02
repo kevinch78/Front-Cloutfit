@@ -61,17 +61,17 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-purple-50 to-pink-50 flex items-center justify-center px-4 py-12 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50 to-cyan-50 flex items-center justify-center px-4 py-12 relative overflow-hidden">
       {/* Decoraciones */}
-      <div className="absolute top-10 left-10 w-32 h-32 md:w-48 md:h-48 bg-primary-400 rounded-full opacity-20 blur-3xl animate-pulse-slow"></div>
-      <div className="absolute bottom-10 right-10 w-48 h-48 md:w-64 md:h-64 bg-purple-300 rounded-full opacity-20 blur-3xl animate-pulse-slow animation-delay-1000"></div>
+      <div className="absolute top-10 left-10 w-32 h-32 md:w-48 md:h-48 bg-cyan-400 rounded-full opacity-20 blur-3xl animate-pulse-slow"></div>
+      <div className="absolute bottom-10 right-10 w-48 h-48 md:w-64 md:h-64 bg-teal-300 rounded-full opacity-20 blur-3xl animate-pulse-slow animation-delay-1000"></div>
 
       <div className="max-w-md w-full">
         <div className="bg-white rounded-2xl shadow-2xl p-6 md:p-8 relative z-10 animate-slide-up">
           {/* Header */}
           <div className="text-center mb-8">
             <div className="flex items-center justify-center mb-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-primary-600 to-primary-700 rounded-2xl flex items-center justify-center transform -rotate-12 hover:rotate-0 transition-transform">
+              <div className="w-16 h-16 bg-gradient-to-br from-cyan-600 to-cyan-500 rounded-2xl flex items-center justify-center transform -rotate-12 hover:rotate-0 transition-transform">
                 <Sparkles className="w-8 h-8 text-white" />
               </div>
             </div>
@@ -145,7 +145,7 @@ const Register = () => {
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-300 bg-white text-sm md:text-base"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-300 bg-white text-sm md:text-base"
               >
                 <option value="CLIENT">Usuario (Comprador)</option>
                 <option value="VENDOR">Vendedor (Tengo una tienda)</option>
@@ -179,7 +179,7 @@ const Register = () => {
           {/* Login Link */}
           <p className="text-center text-gray-600 text-sm md:text-base">
             ¿Ya tienes cuenta?{' '}
-            <Link to="/login" className="text-primary-600 hover:text-primary-700 font-semibold">
+            <Link to="/login" className="text-cyan-600 hover:text-cyan-700 font-semibold">
               Inicia Sesión
             </Link>
           </p>
