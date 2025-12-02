@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // URL base del backend
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api' || 'https://newvitrinavirtual-production.up.railway.app/api';
 
 // Crear instancia de axios
 const apiClient = axios.create({
@@ -16,13 +16,13 @@ apiClient.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    
+
     // ✅ CRÍTICO: Si NO es FormData, usar application/json
     if (!(config.data instanceof FormData)) {
       config.headers['Content-Type'] = 'application/json';
     }
     // Si ES FormData, axios lo maneja automáticamente con multipart/form-data
-    
+
     return config;
   },
   (error) => {
