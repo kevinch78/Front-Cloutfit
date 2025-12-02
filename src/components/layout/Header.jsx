@@ -5,15 +5,16 @@ import {
   Menu,
   X,
   Search,
-  ShoppingCart,
+  ShoppingBag,
   User,
   Sparkles,
   LogOut,
   Settings,
-  Package,
   Store as StoreIcon,
+  Package
 } from "lucide-react";
-import { logout } from "../../store/slices/authSlice";
+import { logoutWithCleanup } from '../../store/slices/authSlice';
+import NotificationBadge from '../NotificationBadge';
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -21,10 +22,9 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // ✅ ESTADO DE REDUX (NO SIMULADO)
   const { isAuthenticated, user, role } = useSelector((state) => state.auth);
-  const { items } = useSelector((state) => state.cart);
-  const cartItemsCount = items.length;
+  const { items: reservationItems } = useSelector((state) => state.reservation);
+  const reservationItemsCount = reservationItems.length;
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -36,7 +36,7 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logoutWithCleanup());
     navigate("/");
     setIsMobileMenuOpen(false);
   };
@@ -54,30 +54,15 @@ const Header = () => {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2 md:space-x-3">
-            <div className="container-custom">
-              <div className="flex items-center justify-between h-16 md:h-20">
-                {/* Logo */}
-                <Link
-                  to="/"
-                  className="flex items-center space-x-2 md:space-x-3"
-                >
-                  {/* SOLO EL LOGO */}
-                  <img
-                    src="/src/assets/logo.png"
-                    alt="Cloufit logo"
-                    className="w-20 h-20 md:w-12 md:h-12 object-contain"
-                  />
-
-                  {/* Texto Cloufit */}
-                  <span className="font-bold text-xl md:text-2xl hidden sm:block">
-                    Cloufit
-                  </span>
-                </Link>
-              </div>
-            </div>
+            <img
+              src="/src/assets/logo.png"
+              alt="Cloufit logo"
+              className="w-20 h-20 md:w-12 md:h-12 object-contain"
+            />
+            <span className="font-bold text-xl md:text-2xl hidden sm:block">
+              Cloufit
+            </span>
           </Link>
-
-          {/* Mobile Search - Mobile */}
 
           {/* Search Bar - Desktop */}
           <form
@@ -110,32 +95,25 @@ const Header = () => {
           </nav>
 
           {/* Actions */}
-          <div className="flex items-center space-x-2 md:space-x-4">
-            {/* AI Button */}
-            <Link
-              to="/ai-assistant"
-              className="hidden md:flex items-center space-x-2 bg-white text-primary-600 px-4 py-2 rounded-lg hover:bg-primary-50 transition-all hover:scale-105 font-medium"
-            >
-              <Sparkles className="w-5 h-5" />
-              <span className="hidden xl:inline">IA Moda</span>
-            </Link>
+          <div className="flex items-center space-x-3 md:space-x-4">
 
-            {/* Cart */}
+            {/* Reservation Cart */}
             <Link
-              to="/cart"
-              className="relative p-2 hover:bg-primary-600 rounded-lg transition-colors"
+              to="/reservation"
+              className="relative p-2.5 bg-white/10 hover:bg-white/20 rounded-full transition-all duration-300 group"
+              title="Mi Cesta de Reserva"
             >
-              <ShoppingCart className="w-6 h-6" />
-              {cartItemsCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                  {cartItemsCount}
+              <ShoppingBag className="w-5 h-5 text-white group-hover:scale-110 transition-transform" />
+              {reservationItemsCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-primary-600">
+                  {reservationItemsCount}
                 </span>
               )}
             </Link>
 
-            {/* User Menu */}
+            {/* User Menu - Desktop Only */}
             {isAuthenticated ? (
-              <div className="relative group">
+              <div className="hidden md:block relative group">
                 <button className="flex items-center space-x-2 p-2 hover:bg-primary-600 rounded-lg transition-colors">
                   <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
                     <User className="w-5 h-5 text-primary-600" />
@@ -146,7 +124,7 @@ const Header = () => {
                 </button>
 
                 {/* Dropdown Menu */}
-                <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 overflow-hidden">
+                <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 overflow-hidden">
                   {/* User Info Header */}
                   <div className="px-4 py-3 border-b bg-gray-50">
                     <p className="text-sm text-gray-500">Hola,</p>
@@ -162,6 +140,9 @@ const Header = () => {
 
                   {/* Menu Items */}
                   <div className="py-2">
+                    {/* Notificaciones */}
+                    <NotificationBadge isInMenu={true} />
+
                     {/* Para TODOS los usuarios */}
                     <Link
                       to="/profile"
@@ -180,6 +161,13 @@ const Header = () => {
                         >
                           <Package className="w-4 h-4 mr-3" />
                           Mi Ropero
+                        </Link>
+                        <Link
+                          to="/client/my-reservations"
+                          className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-100 transition-colors"
+                        >
+                          <Package className="w-4 h-4 mr-3" />
+                          Mis Reservas
                         </Link>
                         <Link
                           to="/ai-assistant"
@@ -312,33 +300,36 @@ const Header = () => {
               </Link>
             ))}
 
-            {/* AI Button Mobile */}
-            <Link
-              to="/ai-assistant"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center space-x-2 px-4 py-3 bg-white text-primary-600 rounded-lg hover:bg-primary-50 transition-colors font-medium"
-            >
-              <Sparkles className="w-5 h-5" />
-              <span>IA Asistente de Moda</span>
-            </Link>
-
             {/* User Menu Mobile */}
             {isAuthenticated ? (
               <div className="space-y-2 pt-4 border-t border-primary-700">
-                <div className="px-4 py-2">
-                  <p className="text-sm text-primary-200">Hola,</p>
-                  <p className="font-semibold">{user?.email}</p>
-                  <p className="text-xs text-primary-300 mt-1">
-                    {role === "ADMIN" && "👑 Administrador"}
-                    {role === "VENDOR" && "🏪 Vendedor"}
-                    {role === "CLIENT" && "👤 Cliente"}
-                  </p>
+                <div className="px-4 py-2 flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">
+                    <User className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-primary-200">Hola,</p>
+                    <p className="font-semibold text-white truncate max-w-[200px]">{user?.email}</p>
+                    <p className="text-xs text-primary-300 mt-0.5">
+                      {role === "ADMIN" && "👑 Administrador"}
+                      {role === "VENDOR" && "🏪 Vendedor"}
+                      {role === "CLIENT" && "👤 Cliente"}
+                    </p>
+                  </div>
                 </div>
+
+                {/* Sección Mi Cuenta */}
+                <div className="px-4 pb-2">
+                  <p className="text-xs font-bold text-primary-400 uppercase tracking-wider mb-2">Mi Cuenta</p>
+                </div>
+
+                {/* Notificaciones Mobile */}
+                <NotificationBadge isInMenu={true} isMobile={true} onClick={() => setIsMobileMenuOpen(false)} />
 
                 <Link
                   to="/profile"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center px-4 py-3 hover:bg-primary-700 rounded-lg transition-colors"
+                  className="flex items-center px-4 py-3 hover:bg-primary-700 rounded-lg transition-colors text-white"
                 >
                   <Settings className="w-5 h-5 mr-3" />
                   Mi Perfil
@@ -349,10 +340,26 @@ const Header = () => {
                     <Link
                       to="/closet"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex items-center px-4 py-3 hover:bg-primary-700 rounded-lg transition-colors"
+                      className="flex items-center px-4 py-3 hover:bg-primary-700 rounded-lg transition-colors text-white"
                     >
                       <Package className="w-5 h-5 mr-3" />
                       Mi Ropero
+                    </Link>
+                    <Link
+                      to="/client/my-reservations"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center px-4 py-3 hover:bg-primary-700 rounded-lg transition-colors text-white"
+                    >
+                      <Package className="w-5 h-5 mr-3" />
+                      Mis Reservas
+                    </Link>
+                    <Link
+                      to="/ai-assistant"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center px-4 py-3 hover:bg-primary-700 rounded-lg transition-colors text-white"
+                    >
+                      <Sparkles className="w-5 h-5 mr-3" />
+                      Asistente IA
                     </Link>
                   </>
                 )}
@@ -362,7 +369,7 @@ const Header = () => {
                     <Link
                       to="/seller/dashboard"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex items-center px-4 py-3 hover:bg-primary-700 rounded-lg transition-colors"
+                      className="flex items-center px-4 py-3 hover:bg-primary-700 rounded-lg transition-colors text-white"
                     >
                       <Package className="w-5 h-5 mr-3" />
                       Mi Dashboard
@@ -370,7 +377,7 @@ const Header = () => {
                     <Link
                       to="/seller/store"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex items-center px-4 py-3 hover:bg-primary-700 rounded-lg transition-colors"
+                      className="flex items-center px-4 py-3 hover:bg-primary-700 rounded-lg transition-colors text-white"
                     >
                       <StoreIcon className="w-5 h-5 mr-3" />
                       Mi Tienda
@@ -378,7 +385,7 @@ const Header = () => {
                     <Link
                       to="/seller/products"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex items-center px-4 py-3 hover:bg-primary-700 rounded-lg transition-colors"
+                      className="flex items-center px-4 py-3 hover:bg-primary-700 rounded-lg transition-colors text-white"
                     >
                       <Package className="w-5 h-5 mr-3" />
                       Mis Productos
@@ -391,7 +398,7 @@ const Header = () => {
                     <Link
                       to="/admin/dashboard"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex items-center px-4 py-3 hover:bg-primary-700 rounded-lg transition-colors"
+                      className="flex items-center px-4 py-3 hover:bg-primary-700 rounded-lg transition-colors text-white"
                     >
                       <Settings className="w-5 h-5 mr-3" />
                       Panel Admin
@@ -399,7 +406,7 @@ const Header = () => {
                     <Link
                       to="/admin/stores"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex items-center px-4 py-3 hover:bg-primary-700 rounded-lg transition-colors"
+                      className="flex items-center px-4 py-3 hover:bg-primary-700 rounded-lg transition-colors text-white"
                     >
                       <StoreIcon className="w-5 h-5 mr-3" />
                       Todas las Tiendas
@@ -407,7 +414,7 @@ const Header = () => {
                     <Link
                       to="/admin/products"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex items-center px-4 py-3 hover:bg-primary-700 rounded-lg transition-colors"
+                      className="flex items-center px-4 py-3 hover:bg-primary-700 rounded-lg transition-colors text-white"
                     >
                       <Package className="w-5 h-5 mr-3" />
                       Todos los Productos

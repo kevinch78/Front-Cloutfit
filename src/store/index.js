@@ -3,6 +3,8 @@ import authReducer from './slices/authSlice';
 import productReducer from './slices/productSlice';
 import cartReducer from './slices/cartSlice';
 import closetReducer from './slices/closetSlice';
+import reservationReducer from './slices/reservationSlice';
+import notificationReducer from './slices/notificationSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +12,8 @@ export const store = configureStore({
     products: productReducer,
     cart: cartReducer,
     closet: closetReducer,
+    reservation: reservationReducer,
+    notifications: notificationReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

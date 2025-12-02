@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ShoppingCart, Heart, ArrowLeft, Store } from 'lucide-react';
-import { useDispatch } from 'react-redux';
+import { ShoppingCart, Heart, ArrowLeft, Store, Box } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../components/common/Button';
 import Loader from '../../components/common/Loader';
 import { productService } from '../../services/productService';
-import { addToCart } from '../../store/slices/cartSlice';
+import { addOrUpdateItem } from '../../store/slices/reservationSlice';
 
 const ProductPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedSize, setSelectedSize] = useState('');
 
   useEffect(() => {
     loadProduct();
@@ -29,11 +29,32 @@ const ProductPage = () => {
     setLoading(false);
   };
 
-  const handleAddToCart = () => {
-    if (product) {
-      dispatch(addToCart(product));
-      // Mostrar notificación (puedes usar toast)
-      alert('Producto agregado al carrito');
+  const handleAddToReservation = async () => {
+    if (!isAuthenticated) {
+      alert('Debes iniciar sesión para hacer una reserva');
+      navigate('/login');
+      return;
+    }
+
+    if (!user?.clientId) {
+      alert('Solo los clientes pueden hacer reservas');
+      return;
+    }
+
+    if (!product) return;
+
+    try {
+      await dispatch(addOrUpdateItem({
+        clientId: user.clientId,
+        storeId: product.storeId,
+        product: product,
+        quantity: 1
+      })).unwrap();
+
+      alert('Producto añadido a tu cesta de reserva');
+    } catch (error) {
+      console.error('Error al añadir a reserva:', error);
+      alert(error || 'Error al añadir a la reserva');
     }
   };
 
@@ -98,7 +119,7 @@ const ProductPage = () => {
               <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 {product.name}
               </h1>
-              
+
               <div className="flex items-center gap-2 mb-4">
                 {product.style && (
                   <span className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">
@@ -188,11 +209,13 @@ const ProductPage = () => {
                 <Button
                   variant="primary"
                   fullWidth
-                  icon={<ShoppingCart className="w-5 h-5" />}
-                  onClick={handleAddToCart}
+                  icon={<Box className="w-5 h-5" />}
+                  onClick={handleAddToReservation}
                   disabled={product.stock === 0}
                 >
-                  {product.stock === 0 ? 'Agotado' : 'Agregar al Carrito'}
+                  {product.stock === 0
+                    ? 'No disponible para reservar'
+                    : 'Añadir a la Cesta'}
                 </Button>
 
                 <Button
