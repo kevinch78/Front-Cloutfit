@@ -29,8 +29,10 @@ import Profile from '../pages/client/Profile';
 import VendorDashboard from '../pages/seller/VendorDashboard';
 import CreateProduct from '../pages/seller/CreateProduct';
 import MyProducts from '../pages/seller/MyProducts';
-//Notis
-import NotificationsPage from '../pages/NotificationsPage'
+import MyStore from '../pages/seller/MyStore';
+
+// Notifications
+import NotificationsPage from '../pages/NotificationsPage';
 
 const AppRoutes = () => {
   return (
@@ -50,10 +52,7 @@ const AppRoutes = () => {
       <Route path="/contact" element={<ContactPage />} />
 
       {/* Client Routes (Any authenticated user) */}
-      <Route
-        path="/ai-assistant"
-        element={<AIAssistant />}
-      />
+      <Route path="/ai-assistant" element={<AIAssistant />} />
 
       {/* Cesta de Reservas (Carrito Activo) */}
       <Route
@@ -130,10 +129,27 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/seller/store"
+        element={
+          <ProtectedRoute allowedRoles={['VENDOR']}>
+            <MyStore />
+          </ProtectedRoute>
+        }
+      />
 
-      {/* 404 */}
-      <Route path="*" element={<div className="container-custom py-20 text-center"><h1 className="text-4xl font-bold">404 - Página no encontrada</h1></div>} />
+      {/* Notifications */}
       <Route path="/notifications" element={<NotificationsPage />} />
+
+      {/* 404 - Debe ir al final */}
+      <Route
+        path="*"
+        element={
+          <div className="container-custom py-20 text-center">
+            <h1 className="text-4xl font-bold">404 - Página no encontrada</h1>
+          </div>
+        }
+      />
     </Routes>
   );
 };

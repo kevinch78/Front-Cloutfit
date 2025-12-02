@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { 
-  Store, 
-  Package, 
-  ShoppingBag, 
-  TrendingUp, 
+import {
+  Store,
+  Package,
+  ShoppingBag,
+  TrendingUp,
   Plus,
   Eye,
   Edit
@@ -13,14 +13,18 @@ import {
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import Loader from '../../components/common/Loader';
+import { storeService } from '../../services/storeService';
+import { productService } from '../../services/productService';
 
 const VendorDashboard = () => {
   const { user } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(true);
+  const [storeInfo, setStoreInfo] = useState(null);
   const [stats, setStats] = useState({
     totalProducts: 0,
     lowStock: 0,
     totalValue: 0,
+    newThisWeek: 0,
   });
 
   useEffect(() => {
@@ -28,16 +32,73 @@ const VendorDashboard = () => {
   }, []);
 
   const loadDashboardData = async () => {
-    // TODO: Cargar estadísticas reales desde el backend
-    // Por ahora usamos datos de ejemplo
-    setTimeout(() => {
+    try {
+      if (!user?.storeId) {
+        setLoading(false);
+        return;
+      }
+
+      // 1. Obtener información de la tienda
+      const storeResponse = await storeService.getStoreById(user.storeId);
+      if (storeResponse.success) {
+        setStoreInfo(storeResponse.data);
+      }
+
+      // 2. Obtener productos de la tienda
+      const productsResponse = await productService.getProductsByStore(user.storeId);
+
+      if (productsResponse.success) {
+        const products = productsResponse.data;
+
+        // 3. Calcular estadísticas reales
+        const totalProducts = products.length;
+
+        // Productos con stock bajo (menos de 5 unidades)
+        const lowStock = products.filter(p => p.stock < 5).length;
+
+        // Valor total del inventario (precio × stock)
+        const totalValue = products.reduce((sum, p) => {
+          return sum + ((p.price || 0) * (p.stock || 0));
+        }, 0);
+
+        // Productos nuevos esta semana
+        const weekAgo = new Date();
+        weekAgo.setDate(weekAgo.getDate() - 7);
+
+        const newThisWeek = products.filter(p => {
+          if (!p.createdAt) return false;
+          const createdDate = new Date(p.createdAt);
+          return createdDate >= weekAgo;
+        }).length;
+
+        setStats({
+          totalProducts,
+          lowStock,
+          totalValue,
+          newThisWeek,
+        });
+      } else {
+        // Si falla, usar valores por defecto
+        console.warn('No se pudieron cargar los productos:', productsResponse.error);
+        setStats({
+          totalProducts: 0,
+          lowStock: 0,
+          totalValue: 0,
+          newThisWeek: 0,
+        });
+      }
+    } catch (error) {
+      console.error('Error al cargar datos del dashboard:', error);
+      // En caso de error, mantener valores en 0
       setStats({
-        totalProducts: 12,
-        lowStock: 3,
-        totalValue: 2450000,
+        totalProducts: 0,
+        lowStock: 0,
+        totalValue: 0,
+        newThisWeek: 0,
       });
+    } finally {
       setLoading(false);
-    }, 500);
+    }
   };
 
   if (loading) {
@@ -67,7 +128,9 @@ const VendorDashboard = () => {
                 </div>
                 <div>
                   <p className="text-white/80 text-sm mb-1">Tu Tienda</p>
-                  <h2 className="text-2xl font-bold">ID: {user.storeId}</h2>
+                  <h2 className="text-2xl font-bold">
+                    {storeInfo?.name || `Tienda #${user.storeId}`}
+                  </h2>
                   <p className="text-white/90 text-sm mt-1">{user.email}</p>
                 </div>
               </div>
@@ -89,10 +152,12 @@ const VendorDashboard = () => {
               <div>
                 <p className="text-gray-600 text-sm mb-1">Total de Productos</p>
                 <p className="text-3xl font-bold text-gray-900">{stats.totalProducts}</p>
-                <p className="text-green-600 text-sm mt-2 flex items-center">
-                  <TrendingUp className="w-4 h-4 mr-1" />
-                  +2 esta semana
-                </p>
+                {stats.newThisWeek > 0 && (
+                  <p className="text-green-600 text-sm mt-2 flex items-center">
+                    <TrendingUp className="w-4 h-4 mr-1" />
+                    +{stats.newThisWeek} esta semana
+                  </p>
+                )}
               </div>
               <div className="w-12 h-12 bg-cyan-100 rounded-xl flex items-center justify-center">
                 <Package className="w-6 h-6 text-cyan-600" />
@@ -106,12 +171,20 @@ const VendorDashboard = () => {
               <div>
                 <p className="text-gray-600 text-sm mb-1">Stock Bajo</p>
                 <p className="text-3xl font-bold text-gray-900">{stats.lowStock}</p>
-                <p className="text-yellow-600 text-sm mt-2">
-                  Requieren atención
-                </p>
+                {stats.lowStock > 0 ? (
+                  <p className="text-yellow-600 text-sm mt-2">
+                    Requieren atención
+                  </p>
+                ) : (
+                  <p className="text-green-600 text-sm mt-2">
+                    Todo en orden ✓
+                  </p>
+                )}
               </div>
-              <div className="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
-                <ShoppingBag className="w-6 h-6 text-yellow-600" />
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${stats.lowStock > 0 ? 'bg-yellow-100' : 'bg-green-100'
+                }`}>
+                <ShoppingBag className={`w-6 h-6 ${stats.lowStock > 0 ? 'text-yellow-600' : 'text-green-600'
+                  }`} />
               </div>
             </div>
           </Card>
@@ -122,7 +195,7 @@ const VendorDashboard = () => {
               <div>
                 <p className="text-gray-600 text-sm mb-1">Valor del Inventario</p>
                 <p className="text-3xl font-bold text-gray-900">
-                  ${(stats.totalValue / 1000).toFixed(0)}K
+                  ${stats.totalValue > 0 ? (stats.totalValue / 1000).toFixed(0) : 0}K
                 </p>
                 <p className="text-gray-600 text-sm mt-2">
                   COP {stats.totalValue.toLocaleString()}
@@ -175,7 +248,7 @@ const VendorDashboard = () => {
               </button>
             </Link>
 
-            <button 
+            <button
               className="w-full flex items-center space-x-4 p-4 border-2 border-gray-200 rounded-xl opacity-50 cursor-not-allowed"
               disabled
             >

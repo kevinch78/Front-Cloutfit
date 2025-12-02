@@ -1,17 +1,18 @@
 import { useState, useEffect } from 'react';
-import { Store, MapPin, Phone, Clock, Upload, Save } from 'lucide-react';
+import { useSelector } from 'react-redux';
+import { Store, MapPin, Phone, Upload, Save } from 'lucide-react';
 import Card from '../../components/common/Card';
 import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
+import Loader from '../../components/common/Loader';
 import { storeService } from '../../services/storeService';
 
 const MyStore = () => {
-  const [loading, setLoading] = useState(false);
+  const { user } = useSelector((state) => state.auth);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [editing, setEditing] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
-  
-  // TODO: Obtener storeId del vendedor actual
-  const myStoreId = 1; // Esto debería venir del perfil del vendedor
 
   const [formData, setFormData] = useState({
     name: '',
@@ -25,25 +26,35 @@ const MyStore = () => {
   });
 
   useEffect(() => {
-    loadMyStore();
-  }, []);
+    if (user?.storeId) {
+      loadMyStore();
+    } else {
+      setLoading(false);
+    }
+  }, [user]);
 
   const loadMyStore = async () => {
-    const result = await storeService.getStoreById(myStoreId);
-    if (result.success) {
-      setFormData({
-        name: result.data.name || '',
-        description: result.data.description || '',
-        city: result.data.city || '',
-        address: result.data.address || '',
-        contact: result.data.contact || '',
-        owner: result.data.owner || '',
-        activeAdvertising: result.data.activeAdvertising || false,
-        image: null,
-      });
-      if (result.data.imageUrl) {
-        setImagePreview(result.data.imageUrl);
+    try {
+      const result = await storeService.getStoreById(user.storeId);
+      if (result.success) {
+        setFormData({
+          name: result.data.name || '',
+          description: result.data.description || '',
+          city: result.data.city || '',
+          address: result.data.address || '',
+          contact: result.data.contact || '',
+          owner: result.data.owner || '',
+          activeAdvertising: result.data.activeAdvertising || false,
+          image: null,
+        });
+        if (result.data.imageUrl) {
+          setImagePreview(result.data.imageUrl);
+        }
       }
+    } catch (error) {
+      console.error('Error al cargar tienda:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,7 +70,7 @@ const MyStore = () => {
     const file = e.target.files[0];
     if (file) {
       setFormData({ ...formData, image: file });
-      
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -70,27 +81,54 @@ const MyStore = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setSaving(true);
 
-    const data = new FormData();
-    Object.keys(formData).forEach(key => {
-      if (formData[key] !== null && formData[key] !== '') {
-        data.append(key, formData[key]);
+    try {
+      const data = new FormData();
+      Object.keys(formData).forEach(key => {
+        if (formData[key] !== null && formData[key] !== '') {
+          data.append(key, formData[key]);
+        }
+      });
+
+      const result = await storeService.updateStore(user.storeId, data);
+
+      if (result.success) {
+        alert('✅ Tienda actualizada exitosamente');
+        setEditing(false);
+        loadMyStore();
+      } else {
+        alert('❌ ' + result.error);
       }
-    });
-
-    const result = await storeService.updateStore(myStoreId, data);
-
-    if (result.success) {
-      alert('Tienda actualizada exitosamente');
-      setEditing(false);
-      loadMyStore();
-    } else {
-      alert(result.error);
+    } catch (error) {
+      alert('❌ Error al actualizar la tienda');
+      console.error(error);
+    } finally {
+      setSaving(false);
     }
-
-    setLoading(false);
   };
+
+  if (loading) {
+    return <Loader />;
+  }
+
+  if (!user?.storeId) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="container-custom max-w-4xl">
+          <Card className="text-center py-16">
+            <Store className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              No tienes una tienda asignada
+            </h2>
+            <p className="text-gray-600">
+              Contacta al administrador para que te asigne una tienda.
+            </p>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -99,7 +137,7 @@ const MyStore = () => {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-primary-600 rounded-xl flex items-center justify-center">
+              <div className="w-12 h-12 bg-cyan-600 rounded-xl flex items-center justify-center">
                 <Store className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -186,7 +224,7 @@ const MyStore = () => {
                   value={formData.description}
                   onChange={handleChange}
                   rows="4"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:bg-gray-100"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 disabled:bg-gray-100 disabled:text-gray-500"
                   placeholder="Describe tu tienda..."
                   disabled={!editing}
                 />
@@ -253,7 +291,7 @@ const MyStore = () => {
                 checked={formData.activeAdvertising}
                 onChange={handleChange}
                 disabled={!editing}
-                className="w-5 h-5 text-primary-600 rounded focus:ring-primary-500"
+                className="w-5 h-5 text-cyan-600 rounded focus:ring-cyan-500 disabled:opacity-50"
               />
               <div>
                 <p className="font-medium text-gray-900">Publicidad Activa</p>
@@ -275,14 +313,15 @@ const MyStore = () => {
                   loadMyStore();
                 }}
                 className="flex-1"
+                disabled={saving}
               >
                 Cancelar
               </Button>
               <Button
                 type="submit"
                 variant="primary"
-                loading={loading}
-                icon={!loading && <Save className="w-5 h-5" />}
+                loading={saving}
+                icon={!saving && <Save className="w-5 h-5" />}
                 className="flex-1"
               >
                 Guardar Cambios

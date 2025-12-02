@@ -95,28 +95,30 @@ const Header = () => {
 
           {/* Actions */}
           <div className="flex items-center space-x-2 md:space-x-3 ml-2 flex-shrink-0">
-            {/* AI Button */}
+            {/* AI Button
             <Link
               to="/ai-assistant"
               className="hidden md:flex items-center space-x-2 bg-cyan-600 hover:bg-cyan-500 text-white px-5 py-2.5 rounded-lg transition-all hover:scale-105 font-medium shadow-md"
             >
               <Sparkles className="w-5 h-5" />
               <span className="hidden xl:inline">IA Moda</span>
-            </Link>
+            </Link> */}
 
-            {/* Reservation Cart */}
-            <Link
-              to="/reservation"
-              className="relative p-2 hover:bg-slate-700/50 rounded-lg transition-colors"
-              title="Mi Cesta de Reserva"
-            >
-              <ShoppingBag className="w-6 h-6 text-gray-200" />
-              {reservationItemsCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-cyan-600">
-                  {reservationItemsCount}
-                </span>
-              )}
-            </Link>
+            {/* Reservation Cart - Solo para CLIENT */}
+            {role === "CLIENT" && (
+              <Link
+                to="/reservation"
+                className="relative p-2 hover:bg-slate-700/50 rounded-lg transition-colors"
+                title="Mi Cesta de Reserva"
+              >
+                <ShoppingBag className="w-6 h-6 text-gray-200" />
+                {reservationItemsCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-cyan-600">
+                    {reservationItemsCount}
+                  </span>
+                )}
+              </Link>
+            )}
 
             {/* User Menu - Desktop Only */}
             {isAuthenticated ? (

@@ -276,8 +276,8 @@ const AIAssistant = () => {
                         {/* Avatar */}
                         {message.type !== "action" && (
                           <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-md ${message.type === "user"
-                              ? "bg-gradient-to-r from-cyan-600 to-teal-600 ring-2 ring-cyan-400/50"
-                              : "bg-gradient-to-br from-cyan-50 to-teal-50 border-2 border-cyan-200"
+                            ? "bg-gradient-to-r from-cyan-600 to-teal-600 ring-2 ring-cyan-400/50"
+                            : "bg-gradient-to-br from-cyan-50 to-teal-50 border-2 border-cyan-200"
                             }`}>
                             {message.type === "user" ? (
                               <User className="w-5 h-5 text-white" />
@@ -291,8 +291,8 @@ const AIAssistant = () => {
                         <div className={`flex flex-col ${message.type === "user" ? "items-end" : "items-start"}`}>
                           {message.type !== "action" ? (
                             <div className={`p-5 rounded-2xl shadow-md text-sm md:text-base leading-relaxed ${message.type === "user"
-                                ? "bg-gradient-to-r from-cyan-600 to-teal-600 text-white rounded-tr-none border-2 border-cyan-500/50"
-                                : "bg-white border-2 border-gray-200 text-slate-800 rounded-tl-none"
+                              ? "bg-gradient-to-r from-cyan-600 to-teal-600 text-white rounded-tr-none border-2 border-cyan-500/50"
+                              : "bg-white border-2 border-gray-200 text-slate-800 rounded-tl-none"
                               }`}>
                               <p className="whitespace-pre-line">{message.content}</p>
 

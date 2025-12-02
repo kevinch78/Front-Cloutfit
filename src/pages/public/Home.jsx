@@ -66,34 +66,35 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Modal Preview IA */}
+            {/* Video Preview Section */}
             <div className="hidden lg:block animate-fade-in animation-delay-400">
-              <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 shadow-2xl">
-                <div className="flex items-center space-x-2 mb-4">
-                  <Sparkles className="w-6 h-6 text-cyan-200" />
-                  <h3 className="text-xl font-bold">¡Crea tu Outfit Ideal!</h3>
-                </div>
-                
-                <div className="space-y-3 mb-4">
-                  <div className="flex items-center space-x-2">
-                    <input type="checkbox" checked readOnly className="rounded" />
-                    <span className="text-sm">Hombre</span>
-                    <input type="checkbox" className="rounded ml-4" />
-                    <span className="text-sm">Mujer</span>
-                  </div>
-                  
-                  <textarea
-                    placeholder="Dime cómo quieres tu outfit (ej: 'Algo formal para clima frío') 🔥"
-                    className="w-full px-4 py-3 rounded-lg text-gray-900 bg-white/90 placeholder-gray-500 resize-none"
-                    rows="3"
-                    readOnly
-                  />
-                </div>
+              <div className="relative group">
+                {/* Efecto de brillo trasero */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400 to-teal-400 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-1000"></div>
 
-                <button className="w-full bg-cyan-600 text-white py-3 rounded-lg font-semibold hover:bg-cyan-500 transition-all flex items-center justify-center space-x-2">
-                  <Sparkles className="w-5 h-5" />
-                  <span>Generar Outfit</span>
-                </button>
+                <div className="relative bg-white/10 backdrop-blur-xl rounded-2xl p-2 border border-white/20 shadow-2xl overflow-hidden">
+                  <div className="rounded-xl overflow-hidden relative aspect-video bg-slate-900/50">
+                    <video
+                      className="w-full h-full object-cover"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                    >
+                      <source src="/src/assets/videoEccomerce.mp4" type="video/mp4" />
+                      Tu navegador no soporta el elemento de video.
+                    </video>
+
+                    {/* Overlay sutil */}
+                    <div className="absolute inset-0 pointer-events-none ring-1 ring-inset ring-white/10 rounded-xl"></div>
+                  </div>
+
+                  {/* Etiqueta flotante */}
+                  <div className="absolute bottom-6 left-6 bg-black/60 backdrop-blur-md text-white px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 border border-white/10">
+                    <Sparkles className="w-4 h-4 text-cyan-400" />
+                    <span>IA en acción</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
