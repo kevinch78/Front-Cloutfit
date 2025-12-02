@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from 'lucide-react';
+import logo from '../../assets/logoKevin2.png';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -13,7 +14,7 @@ const Footer = () => {
             <div className="flex items-center justify-center mb-6">
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-white/20 shadow-lg">
                 <img
-                  src="/src/assets/logoKevin2.png"
+                  src={logo}
                   alt="Cloufit logo"
                   className="h-24 w-auto md:h-32 object-contain"
                 />

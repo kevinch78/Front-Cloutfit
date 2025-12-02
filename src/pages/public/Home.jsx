@@ -5,6 +5,7 @@ import Button from '../../components/common/Button';
 import Card from '../../components/common/Card';
 import Loader from '../../components/common/Loader';
 import { productService } from '../../services/productService';
+import videoEccomerce from '../../assets/videoEccomerce.mp4';
 
 const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState([]);
@@ -81,7 +82,7 @@ const Home = () => {
                       muted
                       playsInline
                     >
-                      <source src="/src/assets/videoEccomerce.mp4" type="video/mp4" />
+                      <source src={videoEccomerce} type="video/mp4" />
                       Tu navegador no soporta el elemento de video.
                     </video>
 

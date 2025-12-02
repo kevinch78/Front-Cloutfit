@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { logoutWithCleanup } from '../../store/slices/authSlice';
 import NotificationBadge from '../NotificationBadge';
+import logo from '../../assets/logoKevin2.png';
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -56,7 +57,7 @@ const Header = () => {
           <Link to="/" className="flex items-center flex-shrink-0">
             <div className="bg-white/15 backdrop-blur-md rounded-lg px-2.5 py-1.5 md:px-3 md:py-2 border border-white/30 shadow-md">
               <img
-                src="/src/assets/logoKevin2.png"
+                src={logo}
                 alt="Cloufit logo"
                 className="h-10 w-auto md:h-14 object-contain"
               />
@@ -95,15 +96,6 @@ const Header = () => {
 
           {/* Actions */}
           <div className="flex items-center space-x-2 md:space-x-3 ml-2 flex-shrink-0">
-            {/* AI Button
-            <Link
-              to="/ai-assistant"
-              className="hidden md:flex items-center space-x-2 bg-cyan-600 hover:bg-cyan-500 text-white px-5 py-2.5 rounded-lg transition-all hover:scale-105 font-medium shadow-md"
-            >
-              <Sparkles className="w-5 h-5" />
-              <span className="hidden xl:inline">IA Moda</span>
-            </Link> */}
-
             {/* Reservation Cart - Solo para CLIENT */}
             {role === "CLIENT" && (
               <Link
@@ -206,7 +198,7 @@ const Header = () => {
                           Mi Tienda
                         </Link>
                         <Link
-                          to="/seller/products"
+                          to="/seller/MyProducts"
                           className="flex items-center px-4 py-3 text-gray-200 hover:bg-slate-700/50 transition-colors"
                         >
                           <Package className="w-4 h-4 mr-3 text-cyan-400" />
@@ -402,7 +394,7 @@ const Header = () => {
                       Mi Tienda
                     </Link>
                     <Link
-                      to="/seller/products"
+                      to="/seller/MyProducts"
                       onClick={() => setIsMobileMenuOpen(false)}
                       className="flex items-center px-4 py-3 text-gray-200 hover:bg-slate-700/50 rounded-lg transition-colors"
                     >
