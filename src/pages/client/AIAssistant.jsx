@@ -60,7 +60,7 @@ const AIAssistant = () => {
         const aiResponse = result.data;
         const botContent = aiResponse.reason || "¡Aquí está tu outfit!";
         const outfitProducts = aiResponse.selectedProducts || [];
-        
+
         const mappedProducts = outfitProducts.map((item) => ({
           name: item.product.name,
           description: item.product.description || item.product.iaDescription,
@@ -96,8 +96,8 @@ const AIAssistant = () => {
               outfitName: `Outfit ${gender} - ${new Date().toLocaleDateString()}`,
               description: botContent,
               products: outfitProducts.map(p => ({
-                productId: p.product.productId,
-                storeId: p.store.storeId,
+                productId: p.product.idProduct,
+                storeId: p.product.storeId || p.store.storeId,
                 productName: p.product.name,
                 productPrice: p.product.price,
                 productImageUrl: p.product.imageUrl,
@@ -146,307 +146,275 @@ const AIAssistant = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-purple-50 to-pink-50 py-8">
-      <div className="container-custom max-w-5xl">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-primary-600 to-purple-600 rounded-3xl mb-4 shadow-lg">
-            <Sparkles className="w-10 h-10 text-white" />
+    <div className="min-h-screen bg-[conic-gradient(at_top_right,_var(--tw-gradient-stops))] from-indigo-100 via-purple-100 to-pink-100 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto space-y-8">
+
+        {/* Header Section */}
+        <div className="text-center space-y-4 animate-fade-in">
+          <div className="relative inline-block">
+            <div className="absolute -inset-1 bg-gradient-to-r from-primary-600 to-purple-600 rounded-full blur opacity-30 animate-pulse"></div>
+            <div className="relative inline-flex items-center justify-center w-20 h-20 bg-white rounded-full shadow-xl ring-4 ring-white">
+              <Sparkles className="w-10 h-10 text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-purple-600 fill-current" />
+            </div>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-            Asistente IA de Moda
-          </h1>
-          <p className="text-gray-600 text-lg">
-            Descubre tu outfit perfecto con ayuda de inteligencia artificial
-          </p>
+          <div>
+            <h1 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary-700 via-purple-700 to-pink-700 tracking-tight">
+              Asistente de Moda IA
+            </h1>
+            <p className="mt-3 text-lg text-gray-600 max-w-2xl mx-auto font-medium">
+              Tu estilista personal inteligente. Descubre looks únicos diseñados solo para ti.
+            </p>
+          </div>
         </div>
 
-        {/* Gender Selection */}
+        {/* Gender Selection Cards */}
         {!gender && messages.length === 1 && (
-          <Card className="mb-6 animate-slide-up">
-            <h3 className="text-lg font-semibold mb-4 text-center">
-              Primero, ¿para quién es el outfit?
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-slide-up">
+            {[
+              { id: "Masculino", icon: "👨", label: "Hombre", desc: "Outfits varoniles y modernos" },
+              { id: "Femenino", icon: "👩", label: "Mujer", desc: "Estilos femeninos y en tendencia" },
+              { id: "Unisex", icon: "🌟", label: "Unisex", desc: "Moda sin género y versátil" }
+            ].map((item) => (
               <button
-                onClick={() => setGender("Masculino")}
-                className="p-4 border-2 border-gray-300 rounded-lg hover:border-primary-600 hover:bg-primary-50 transition-all"
+                key={item.id}
+                onClick={() => setGender(item.id)}
+                className="group relative p-8 bg-white/80 backdrop-blur-xl rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-white/50 hover:-translate-y-2 text-left overflow-hidden"
               >
-                <div className="text-4xl mb-2">👨</div>
-                <p className="font-medium">Hombre</p>
+                <div className="absolute inset-0 bg-gradient-to-br from-primary-50 to-purple-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative z-10">
+                  <span className="text-5xl mb-4 block transform group-hover:scale-110 transition-transform duration-300">{item.icon}</span>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">{item.label}</h3>
+                  <p className="text-sm text-gray-500 group-hover:text-gray-700 transition-colors">{item.desc}</p>
+                </div>
+                <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 transition-all duration-300">
+                  <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center">
+                    <Send className="w-4 h-4 text-primary-600" />
+                  </div>
+                </div>
               </button>
-              <button
-                onClick={() => setGender("Femenino")}
-                className="p-4 border-2 border-gray-300 rounded-lg hover:border-primary-600 hover:bg-primary-50 transition-all"
-              >
-                <div className="text-4xl mb-2">👩</div>
-                <p className="font-medium">Mujer</p>
-              </button>
-              <button
-                onClick={() => setGender("Unisex")}
-                className="p-4 border-2 border-gray-300 rounded-lg hover:border-primary-600 hover:bg-primary-50 transition-all col-span-2 md:col-span-1"
-              >
-                <div className="text-4xl mb-2">🌟</div>
-                <p className="font-medium">Unisex</p>
-              </button>
-            </div>
-          </Card>
+            ))}
+          </div>
         )}
 
-        {/* Selected Gender Badge */}
+        {/* Active Session Interface */}
         {gender && (
-          <Card className="mb-6 bg-primary-50 border-primary-200">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <span className="text-2xl">
-                  {gender === "Masculino"
-                    ? "👨"
-                    : gender === "Femenino"
-                    ? "👩"
-                    : "🌟"}
-                </span>
-                <div>
-                  <p className="font-semibold text-gray-900">
-                    Género seleccionado: {gender}
-                  </p>
-                  <button
-                    onClick={() => setGender("")}
-                    className="text-sm text-primary-600 hover:text-primary-700"
-                  >
+          <div className="grid lg:grid-cols-4 gap-6 animate-fade-in">
+
+            {/* Sidebar / Context Panel */}
+            <div className="lg:col-span-1 space-y-4">
+              {/* Gender Badge */}
+              <div className="bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-sm border border-white/50">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Perfil</span>
+                  <button onClick={() => setGender("")} className="text-xs font-semibold text-primary-600 hover:text-primary-700 hover:underline">
                     Cambiar
                   </button>
                 </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-2xl bg-primary-50 flex items-center justify-center text-2xl shadow-inner">
+                    {gender === "Masculino" ? "👨" : gender === "Femenino" ? "👩" : "🌟"}
+                  </div>
+                  <div>
+                    <p className="font-bold text-gray-900">{gender}</p>
+                    <p className="text-xs text-gray-500">Modo activo</p>
+                  </div>
+                </div>
               </div>
 
-              {/* Toggle para generar imagen */}
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="generateImage"
-                  checked={generateImage}
-                  onChange={(e) => setGenerateImage(e.target.checked)}
-                  className="w-5 h-5 text-primary-600 rounded focus:ring-primary-500"
-                />
-                <label
-                  htmlFor="generateImage"
-                  className="text-sm font-medium text-gray-700 cursor-pointer flex items-center"
-                >
-                  <ImageIcon className="w-4 h-4 mr-1" />
-                  Generar imagen
-                </label>
+              {/* Image Generation Toggle */}
+              <div className="bg-gradient-to-br from-purple-600 to-primary-600 p-5 rounded-2xl shadow-lg text-white relative overflow-hidden group">
+                <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-all"></div>
+                <div className="relative z-10">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-bold flex items-center gap-2">
+                      <ImageIcon className="w-4 h-4" />
+                      Visualización
+                    </span>
+                    <div className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        id="generateImage"
+                        checked={generateImage}
+                        onChange={(e) => setGenerateImage(e.target.checked)}
+                        className="sr-only peer"
+                      />
+                      <div className="w-9 h-5 bg-white/30 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-white/90"></div>
+                    </div>
+                  </div>
+                  <label htmlFor="generateImage" className="text-xs text-purple-100 cursor-pointer block">
+                    Activa para generar imágenes fotorealistas de tus outfits.
+                  </label>
+                </div>
+              </div>
+
+              {/* Tips Accordion (Simplified) */}
+              <div className="bg-white/80 backdrop-blur-sm p-5 rounded-2xl shadow-sm border border-white/50">
+                <h3 className="font-bold text-gray-800 mb-3 flex items-center text-sm">
+                  <Sparkles className="w-4 h-4 text-yellow-500 mr-2" />
+                  Tips Pro
+                </h3>
+                <ul className="space-y-2 text-xs text-gray-600">
+                  <li className="flex gap-2"><span className="text-primary-500">•</span> Sé específico con la ocasión.</li>
+                  <li className="flex gap-2"><span className="text-primary-500">•</span> Menciona tu clima local.</li>
+                  <li className="flex gap-2"><span className="text-primary-500">•</span> Define tu estilo (Urbano, Formal...).</li>
+                </ul>
               </div>
             </div>
-          </Card>
-        )}
 
-        {/* Chat Container */}
-        <Card className="mb-6 h-[500px] flex flex-col" padding={false}>
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
-            {messages.map((message) => (
-              <div key={message.id}>
-                {message.type !== "action" ? (
-                  <div
-                    className={`flex items-start gap-3 ${
-                      message.type === "user" ? "flex-row-reverse" : ""
-                    } animate-fade-in`}
-                  >
-                    {/* Avatar */}
-                    <div
-                      className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
-                        message.type === "user"
-                          ? "bg-primary-600"
-                          : "bg-gradient-to-br from-purple-600 to-pink-600"
-                      }`}
-                    >
-                      {message.type === "user" ? (
-                        <User className="w-5 h-5 text-white" />
-                      ) : (
-                        <Bot className="w-5 h-5 text-white" />
-                      )}
-                    </div>
+            {/* Main Chat Area */}
+            <div className="lg:col-span-3">
+              <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/50 h-[650px] flex flex-col overflow-hidden relative">
 
-                    {/* Message Bubble */}
-                    <div
-                      className={`flex-1 max-w-[80%] p-4 rounded-2xl ${
-                        message.type === "user"
-                          ? "bg-primary-600 text-white"
-                          : "bg-white border border-gray-200 text-gray-900"
-                      }`}
-                    >
-                      <p className="leading-relaxed whitespace-pre-line">
-                        {message.content}
-                      </p>
+                {/* Chat Messages */}
+                <div className="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth custom-scrollbar">
+                  {messages.map((message) => (
+                    <div key={message.id} className={`flex w-full ${message.type === "user" ? "justify-end" : "justify-start"} animate-fade-in`}>
+                      <div className={`flex max-w-[90%] md:max-w-[80%] gap-4 ${message.type === "user" ? "flex-row-reverse" : "flex-row"}`}>
 
-                      {message.accessory && (
-                        <div className="mt-3 p-2 bg-blue-50 rounded-lg border border-blue-200">
-                          <p className="text-sm text-blue-800">
-                            💼 <strong>Accesorio:</strong> {message.accessory}
-                          </p>
-                        </div>
-                      )}
+                        {/* Avatar */}
+                        {message.type !== "action" && (
+                          <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center shadow-md ${message.type === "user"
+                              ? "bg-gradient-to-r from-primary-600 to-purple-600"
+                              : "bg-white border border-gray-100"
+                            }`}>
+                            {message.type === "user" ? (
+                              <User className="w-5 h-5 text-white" />
+                            ) : (
+                              <Bot className="w-6 h-6 text-purple-600" />
+                            )}
+                          </div>
+                        )}
 
-                      {message.imageUrl && (
-                        <div className="mt-4">
-                          <p className="text-sm font-semibold mb-2 text-gray-700">
-                            📸 Visualización del outfit:
-                          </p>
-                          <img
-                            src={message.imageUrl}
-                            alt="Outfit generado"
-                            className="rounded-lg max-w-full shadow-lg border border-gray-200"
-                            onError={(e) => {
-                              console.error("❌ Error cargando imagen:", message.imageUrl);
-                              e.target.style.display = 'none';
-                            }}
-                          />
-                        </div>
-                      )}
+                        {/* Bubble */}
+                        <div className={`flex flex-col ${message.type === "user" ? "items-end" : "items-start"}`}>
+                          {message.type !== "action" ? (
+                            <div className={`p-5 rounded-2xl shadow-sm text-sm md:text-base leading-relaxed ${message.type === "user"
+                                ? "bg-gradient-to-r from-primary-600 to-purple-600 text-white rounded-tr-none"
+                                : "bg-white border border-gray-100 text-gray-800 rounded-tl-none"
+                              }`}>
+                              <p className="whitespace-pre-line">{message.content}</p>
 
-                      {message.outfit && message.outfit.length > 0 && (
-                        <div className="mt-4 space-y-3">
-                          <p className="font-semibold text-sm border-b pb-2">
-                            📦 Productos recomendados ({message.outfit.length}):
-                          </p>
-                          {message.outfit.map((product, idx) => (
-                            <div
-                              key={idx}
-                              className="bg-gray-50 p-3 rounded-lg border border-gray-200 hover:shadow-md transition-shadow"
-                            >
-                              <div className="flex items-start justify-between gap-3">
-                                {product.imageUrl && (
+                              {/* Accessory Badge */}
+                              {message.accessory && (
+                                <div className="mt-4 inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg text-xs font-semibold border border-blue-100">
+                                  <span>💼</span>
+                                  <span>Accesorio: {message.accessory}</span>
+                                </div>
+                              )}
+
+                              {/* Generated Image */}
+                              {message.imageUrl && (
+                                <div className="mt-4 group relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
                                   <img
-                                    src={product.imageUrl}
-                                    alt={product.name}
-                                    className="w-16 h-16 object-cover rounded-lg border border-gray-300"
-                                    onError={(e) => e.target.style.display = 'none'}
+                                    src={message.imageUrl}
+                                    alt="Outfit generado"
+                                    className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-500"
+                                    onError={(e) => {
+                                      console.error("❌ Error cargando imagen:", message.imageUrl);
+                                      e.target.style.display = 'none';
+                                    }}
                                   />
-                                )}
-                                
-                                <div className="flex-1">
-                                  <p className="font-semibold text-gray-900 mb-1">
-                                    {product.name}
-                                  </p>
-                                  <p className="text-sm text-gray-600 mb-2 line-clamp-2">
-                                    {product.description || product.style}
-                                  </p>
-                                  <div className="flex flex-wrap items-center gap-2 text-xs text-gray-500">
-                                    {product.storeName && (
-                                      <span className="flex items-center bg-blue-100 px-2 py-1 rounded">
-                                        📍 {product.storeName}
-                                      </span>
-                                    )}
-                                    {product.climate && (
-                                      <span className="flex items-center bg-green-100 px-2 py-1 rounded">
-                                        🌡️ {product.climate}
-                                      </span>
-                                    )}
-                                    {product.garmentType && (
-                                      <span className="flex items-center bg-purple-100 px-2 py-1 rounded">
-                                        👔 {product.garmentType}
-                                      </span>
-                                    )}
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                </div>
+                              )}
+
+                              {/* Products List */}
+                              {message.outfit && message.outfit.length > 0 && (
+                                <div className="mt-5 space-y-3">
+                                  <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Productos Recomendados</p>
+                                  <div className="grid gap-3">
+                                    {message.outfit.map((product, idx) => (
+                                      <div key={idx} className="bg-gray-50/80 p-3 rounded-xl border border-gray-100 flex gap-3 hover:bg-white hover:shadow-md transition-all duration-200">
+                                        {product.imageUrl && (
+                                          <img
+                                            src={product.imageUrl}
+                                            alt={product.name}
+                                            className="w-16 h-16 rounded-lg object-cover shadow-sm"
+                                            onError={(e) => e.target.style.display = 'none'}
+                                          />
+                                        )}
+                                        <div className="flex-1 min-w-0">
+                                          <h4 className="font-bold text-gray-900 truncate">{product.name}</h4>
+                                          <p className="text-xs text-gray-500 line-clamp-1 mb-1">{product.description || product.style}</p>
+                                          <div className="flex items-center justify-between">
+                                            <div className="flex gap-1">
+                                              {product.storeName && <span className="text-[10px] bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-medium">{product.storeName}</span>}
+                                            </div>
+                                            <span className="font-bold text-primary-600">${product.price?.toLocaleString()}</span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    ))}
                                   </div>
                                 </div>
-                                
-                                <div className="text-right ml-3">
-                                  <p className="font-bold text-primary-600 text-lg">
-                                    ${product.price?.toLocaleString()}
-                                  </p>
-                                  {product.stock && (
-                                    <p className="text-xs text-gray-500">
-                                      Stock: {product.stock}
-                                    </p>
-                                  )}
-                                </div>
+                              )}
+                            </div>
+                          ) : (
+                            /* Action Message (Save Button) */
+                            <div className="w-full flex justify-center py-2">
+                              <div className="bg-gradient-to-r from-gray-900 to-gray-800 p-6 rounded-2xl shadow-xl text-center max-w-sm border border-gray-700">
+                                <p className="text-gray-200 mb-4 font-medium">{message.content}</p>
+                                <button
+                                  onClick={() => handleSaveOutfit(message.outfitData)}
+                                  className="w-full py-3 px-4 bg-white text-gray-900 rounded-xl font-bold hover:bg-gray-100 transform hover:scale-105 transition-all flex items-center justify-center gap-2 shadow-lg"
+                                >
+                                  <span>💾</span>
+                                  Guardar en Mi Ropero
+                                </button>
                               </div>
                             </div>
-                          ))}
+                          )}
                         </div>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex justify-center animate-fade-in">
-                    <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
-                      <div className="text-center">
-                        <p className="text-gray-700 mb-3 font-medium">
-                          {message.content}
-                        </p>
-                        <Button
-                          onClick={() => {
-                            handleSaveOutfit(message.outfitData);
-                          }}
-                          icon={<span className="text-lg">💾</span>}
-                        >
-                          Guardar en Mi Ropero
-                        </Button>
                       </div>
-                    </Card>
-                  </div>
-                )}
-              </div>
-            ))}
+                    </div>
+                  ))}
 
-            {loading && (
-              <div className="flex items-start gap-3 animate-fade-in">
-                <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-purple-600 to-pink-600">
-                  <Bot className="w-5 h-5 text-white" />
+                  {/* Loading State */}
+                  {loading && (
+                    <div className="flex w-full justify-start animate-fade-in">
+                      <div className="flex max-w-[80%] gap-4">
+                        <div className="flex-shrink-0 w-10 h-10 rounded-full bg-white border border-gray-100 flex items-center justify-center shadow-md">
+                          <Bot className="w-6 h-6 text-purple-600" />
+                        </div>
+                        <div className="p-4 rounded-2xl bg-white border border-gray-100 shadow-sm rounded-tl-none flex items-center gap-3">
+                          <Loader2 className="w-5 h-5 animate-spin text-primary-600" />
+                          <span className="text-gray-600 text-sm font-medium">
+                            {generateImage ? "Diseñando tu look fotorealista..." : "Analizando tendencias..."}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <div className="flex-1 max-w-[80%] p-4 rounded-2xl bg-white border border-gray-200">
-                  <div className="flex items-center space-x-2">
-                    <Loader2 className="w-5 h-5 animate-spin text-primary-600" />
-                    <span className="text-gray-600">
-                      {generateImage
-                        ? "Generando outfit con imagen fotorealista... (esto puede tardar 5-10 segundos)"
-                        : "Generando outfit..."}
-                    </span>
-                  </div>
+
+                {/* Input Area */}
+                <div className="p-4 bg-white/80 backdrop-blur-md border-t border-gray-100">
+                  <form onSubmit={handleSubmit} className="relative flex items-center gap-2 max-w-4xl mx-auto">
+                    <input
+                      type="text"
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      placeholder={gender ? "Describe la ocasión, clima o estilo..." : "Selecciona un género para comenzar"}
+                      disabled={!gender || loading}
+                      className="w-full pl-6 pr-14 py-4 bg-gray-50 border-0 rounded-full text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:bg-white shadow-inner transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    />
+                    <button
+                      type="submit"
+                      disabled={!gender || loading || !input.trim()}
+                      className="absolute right-2 p-2.5 bg-gradient-to-r from-primary-600 to-purple-600 text-white rounded-full shadow-lg hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:hover:scale-100 transition-all duration-200"
+                    >
+                      <Send className="w-5 h-5" />
+                    </button>
+                  </form>
+                  <p className="text-center text-[10px] text-gray-400 mt-2">
+                    IA impulsada por Cloufit. Los resultados pueden variar.
+                  </p>
                 </div>
+
               </div>
-            )}
+            </div>
           </div>
-
-          <div className="border-t p-4">
-            <form onSubmit={handleSubmit} className="flex gap-2">
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder={
-                  gender
-                    ? "Ej: Algo casual para clima frío..."
-                    : "Primero selecciona el género arriba"
-                }
-                disabled={!gender || loading}
-                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:bg-gray-100 text-sm md:text-base"
-              />
-              <Button
-                type="submit"
-                disabled={!gender || loading || !input.trim()}
-                icon={<Send className="w-5 h-5" />}
-              >
-                <span className="hidden sm:inline">Enviar</span>
-              </Button>
-            </form>
-          </div>
-        </Card>
-
-        <Card>
-          <h3 className="font-semibold mb-3 flex items-center">
-            <Sparkles className="w-5 h-5 text-primary-600 mr-2" />
-            Tips para mejores resultados:
-          </h3>
-          <ul className="space-y-2 text-sm text-gray-600">
-            <li>✨ Menciona la ocasión (ej: "trabajo", "fiesta", "casual")</li>
-            <li>🌡️ Indica el clima (ej: "frío", "cálido", "templado")</li>
-            <li>🎨 Especifica colores preferidos si tienes</li>
-            <li>👔 Menciona el estilo (ej: "formal", "deportivo", "urbano")</li>
-            <li>
-              📸 Activa "Generar imagen" para ver una visualización fotorealista del outfit (tarda 5-10 segundos)
-            </li>
-          </ul>
-        </Card>
+        )}
       </div>
     </div>
   );

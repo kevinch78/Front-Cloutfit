@@ -3,16 +3,30 @@ import { Link } from 'react-router-dom';
 import { Store, MapPin, Phone } from 'lucide-react';
 import Card from '../../components/common/Card';
 import Loader from '../../components/common/Loader';
+import { storeService } from '../../services/storeService';
 
 const StoresPage = () => {
   const [stores, setStores] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // TODO: Implementar servicio de tiendas
-    // Por ahora mostramos un mensaje
-    setLoading(false);
+    loadStores();
   }, []);
+
+  const loadStores = async () => {
+    try {
+      const result = await storeService.getAllStores();
+      if (result.success) {
+        setStores(result.data);
+      } else {
+        console.error('Error loading stores:', result.error);
+      }
+    } catch (error) {
+      console.error('Unexpected error loading stores:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -41,32 +55,38 @@ const StoresPage = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {stores.map((store) => (
-              <Card key={store.id} hover>
-                <Link to={`/store/${store.id}`}>
-                  <div className="aspect-video bg-gray-200 rounded-lg mb-4 overflow-hidden">
+              <Card key={store.storeId} hover>
+                <Link to={`/store/${store.storeId}`}>
+                  <div className="aspect-video bg-gray-200 rounded-lg mb-4 overflow-hidden relative">
                     {store.imageUrl ? (
                       <img
                         src={store.imageUrl}
                         alt={store.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center">
+                      <div className="w-full h-full flex items-center justify-center bg-gray-100">
                         <Store className="w-16 h-16 text-gray-400" />
                       </div>
                     )}
+                    {/* Badge de Publicidad Activa (Opcional, si quieres destacarlas) */}
+                    {store.activeAdvertising && (
+                      <div className="absolute top-2 right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full shadow-sm">
+                        Destacado
+                      </div>
+                    )}
                   </div>
-                  <h3 className="font-bold text-xl mb-2">{store.name}</h3>
-                  <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-                    {store.description}
+                  <h3 className="font-bold text-xl mb-2 text-gray-900">{store.name}</h3>
+                  <p className="text-gray-600 text-sm mb-4 line-clamp-2 h-10">
+                    {store.description || 'Sin descripción disponible.'}
                   </p>
-                  <div className="space-y-2 text-sm text-gray-500">
+                  <div className="space-y-2 text-sm text-gray-500 border-t pt-4">
                     <div className="flex items-center space-x-2">
-                      <MapPin className="w-4 h-4" />
-                      <span>{store.address}</span>
+                      <MapPin className="w-4 h-4 text-primary-500" />
+                      <span className="truncate">{store.city} - {store.address}</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Phone className="w-4 h-4" />
+                      <Phone className="w-4 h-4 text-primary-500" />
                       <span>{store.contact}</span>
                     </div>
                   </div>

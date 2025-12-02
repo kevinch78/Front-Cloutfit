@@ -5,15 +5,16 @@ import {
   Menu,
   X,
   Search,
-  ShoppingCart,
+  ShoppingBag,
   User,
   Sparkles,
   LogOut,
   Settings,
-  Package,
   Store as StoreIcon,
+  Package
 } from "lucide-react";
-import { logout } from "../../store/slices/authSlice";
+import { logoutWithCleanup } from '../../store/slices/authSlice';
+import NotificationBadge from '../NotificationBadge';
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -21,10 +22,9 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // ✅ ESTADO DE REDUX (NO SIMULADO)
   const { isAuthenticated, user, role } = useSelector((state) => state.auth);
-  const { items } = useSelector((state) => state.cart);
-  const cartItemsCount = items.length;
+  const { items: reservationItems } = useSelector((state) => state.reservation);
+  const reservationItemsCount = reservationItems.length;
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -36,7 +36,7 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    dispatch(logout());
+    dispatch(logoutWithCleanup());
     navigate("/");
     setIsMobileMenuOpen(false);
   };
@@ -60,8 +60,6 @@ const Header = () => {
               className="h-16 w-auto md:h-20 object-contain"
             />
           </Link>
-
-          {/* Mobile Search - Mobile */}
 
           {/* Search Bar - Desktop */}
           <form
@@ -104,22 +102,23 @@ const Header = () => {
               <span className="hidden xl:inline">IA Moda</span>
             </Link>
 
-            {/* Cart */}
+            {/* Reservation Cart */}
             <Link
-              to="/cart"
+              to="/reservation"
               className="relative p-2 hover:bg-slate-700/50 rounded-lg transition-colors"
+              title="Mi Cesta de Reserva"
             >
-              <ShoppingCart className="w-6 h-6 text-gray-200" />
-              {cartItemsCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                  {cartItemsCount}
+              <ShoppingBag className="w-6 h-6 text-gray-200" />
+              {reservationItemsCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-cyan-600">
+                  {reservationItemsCount}
                 </span>
               )}
             </Link>
 
-            {/* User Menu */}
+            {/* User Menu - Desktop Only */}
             {isAuthenticated ? (
-              <div className="relative group">
+              <div className="hidden md:block relative group">
                 <button className="flex items-center space-x-2 p-2 hover:bg-slate-700/50 rounded-lg transition-colors">
                   <div className="w-8 h-8 bg-cyan-600 rounded-full flex items-center justify-center">
                     <User className="w-5 h-5 text-white" />
@@ -130,7 +129,7 @@ const Header = () => {
                 </button>
 
                 {/* Dropdown Menu */}
-                <div className="absolute right-0 mt-2 w-56 bg-slate-800 border border-teal-700/50 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 overflow-hidden">
+                <div className="absolute right-0 mt-2 w-64 bg-slate-800 border border-teal-700/50 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 overflow-hidden">
                   {/* User Info Header */}
                   <div className="px-4 py-3 border-b border-teal-700/50 bg-slate-700/30">
                     <p className="text-sm text-gray-400">Hola,</p>
@@ -146,6 +145,9 @@ const Header = () => {
 
                   {/* Menu Items */}
                   <div className="py-2">
+                    {/* Notificaciones */}
+                    <NotificationBadge isInMenu={true} />
+
                     {/* Para TODOS los usuarios */}
                     <Link
                       to="/profile"
@@ -164,6 +166,13 @@ const Header = () => {
                         >
                           <Package className="w-4 h-4 mr-3 text-cyan-400" />
                           Mi Ropero
+                        </Link>
+                        <Link
+                          to="/client/my-reservations"
+                          className="flex items-center px-4 py-3 text-gray-200 hover:bg-slate-700/50 transition-colors"
+                        >
+                          <Package className="w-4 h-4 mr-3 text-cyan-400" />
+                          Mis Reservas
                         </Link>
                         <Link
                           to="/ai-assistant"
@@ -309,15 +318,28 @@ const Header = () => {
             {/* User Menu Mobile */}
             {isAuthenticated ? (
               <div className="space-y-2 pt-4 border-t border-teal-700/50">
-                <div className="px-4 py-2">
-                  <p className="text-sm text-gray-400">Hola,</p>
-                  <p className="font-semibold text-gray-100">{user?.email}</p>
-                  <p className="text-xs text-cyan-400 font-semibold mt-1">
-                    {role === "ADMIN" && "👑 Administrador"}
-                    {role === "VENDOR" && "🏪 Vendedor"}
-                    {role === "CLIENT" && "👤 Cliente"}
-                  </p>
+                <div className="px-4 py-2 flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-cyan-600/20 rounded-full flex items-center justify-center">
+                    <User className="w-6 h-6 text-cyan-300" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-400">Hola,</p>
+                    <p className="font-semibold text-gray-100 truncate max-w-[200px]">{user?.email}</p>
+                    <p className="text-xs text-cyan-400 font-semibold mt-0.5">
+                      {role === "ADMIN" && "👑 Administrador"}
+                      {role === "VENDOR" && "🏪 Vendedor"}
+                      {role === "CLIENT" && "👤 Cliente"}
+                    </p>
+                  </div>
                 </div>
+
+                {/* Sección Mi Cuenta */}
+                <div className="px-4 pb-2">
+                  <p className="text-xs font-bold text-cyan-400 uppercase tracking-wider mb-2">Mi Cuenta</p>
+                </div>
+
+                {/* Notificaciones Mobile */}
+                <NotificationBadge isInMenu={true} isMobile={true} onClick={() => setIsMobileMenuOpen(false)} />
 
                 <Link
                   to="/profile"
@@ -337,6 +359,22 @@ const Header = () => {
                     >
                       <Package className="w-5 h-5 mr-3 text-cyan-400" />
                       Mi Ropero
+                    </Link>
+                    <Link
+                      to="/client/my-reservations"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center px-4 py-3 text-gray-200 hover:bg-slate-700/50 rounded-lg transition-colors"
+                    >
+                      <Package className="w-5 h-5 mr-3 text-cyan-400" />
+                      Mis Reservas
+                    </Link>
+                    <Link
+                      to="/ai-assistant"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center px-4 py-3 text-gray-200 hover:bg-slate-700/50 rounded-lg transition-colors"
+                    >
+                      <Sparkles className="w-5 h-5 mr-3 text-cyan-400" />
+                      Asistente IA
                     </Link>
                   </>
                 )}

@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { clearAuthData } from '../../utils/authUtils';
+import { resetNotifications } from './notificationSlice'; // 👈 IMPORTAR
 
 const initialState = {
   isAuthenticated: false,
@@ -28,11 +29,11 @@ const authSlice = createSlice({
       state.user = action.payload.user;
       state.role = action.payload.user?.role;
       state.error = null;
-      
-      // ✅ AGREGAR: Persistir en localStorage
+
+      // Persistir en localStorage
       localStorage.setItem('token', action.payload.token);
       localStorage.setItem('user', JSON.stringify(action.payload.user));
-      
+
       console.log('✅ Redux + localStorage actualizado:', {
         user: action.payload.user,
         storeId: action.payload.user?.storeId
@@ -54,6 +55,8 @@ const authSlice = createSlice({
       state.token = null;
       state.role = null;
       state.error = null;
+
+      console.log('🚪 Sesión cerrada y notificaciones limpiadas');
     },
 
     // Restaurar sesión desde localStorage (al recargar página)
@@ -62,7 +65,7 @@ const authSlice = createSlice({
       state.token = action.payload.token;
       state.user = action.payload.user;
       state.role = action.payload.user?.role;
-      
+
       console.log('🔄 Sesión restaurada desde localStorage:', {
         user: action.payload.user,
         storeId: action.payload.user?.storeId
@@ -72,7 +75,6 @@ const authSlice = createSlice({
     // Actualizar datos del usuario
     updateUser: (state, action) => {
       state.user = { ...state.user, ...action.payload };
-      // Actualizar en localStorage también
       localStorage.setItem('user', JSON.stringify(state.user));
     },
 
@@ -92,5 +94,11 @@ export const {
   updateUser,
   clearError,
 } = authSlice.actions;
+
+// 👇 MIDDLEWARE PARA LIMPIAR NOTIFICACIONES AL HACER LOGOUT
+export const logoutWithCleanup = () => (dispatch) => {
+  dispatch(logout());
+  dispatch(resetNotifications()); // 👈 Limpiar notificaciones
+};
 
 export default authSlice.reducer;

@@ -1,9 +1,125 @@
-import { X, ShoppingCart, Store } from 'lucide-react';
+import { X, Package, Store } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addOrUpdateItem } from '../../store/slices/reservationSlice';
+import { useState } from 'react';
 
 const OutfitDetailModal = ({ outfit, isOpen, onClose }) => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const [addingProduct, setAddingProduct] = useState(null);
+  const [addingAll, setAddingAll] = useState(false);
+
   if (!isOpen || !outfit) return null;
 
   const totalPrice = outfit.products?.reduce((sum, p) => sum + (p.productPrice || p.price || 0), 0) || 0;
+
+  // Función para agregar un producto individual a la cesta
+  const handleAddToReservation = async (product) => {
+    console.log('🔍 Producto completo recibido:', product);
+    
+    if (!user?.clientId) {
+      alert('Por favor inicia sesión para agregar productos a tu cesta');
+      return;
+    }
+
+    // Mapear los campos correctamente del producto del outfit
+    const productId = product.productId || product.idProduct || product.id;
+    const storeId = product.storeId || product.idStore;
+
+    console.log('🔍 IDs mapeados:', { productId, storeId });
+
+    if (!productId) {
+      console.error('❌ No se pudo encontrar el productId en:', product);
+      alert('❌ Error: Este producto no tiene un ID válido');
+      return;
+    }
+
+    if (!storeId) {
+      console.error('❌ No se pudo encontrar el storeId en:', product);
+      alert('❌ Error: Este producto no tiene una tienda asociada');
+      return;
+    }
+
+    setAddingProduct(productId);
+    
+    try {
+      await dispatch(addOrUpdateItem({
+        clientId: user.clientId,
+        storeId: storeId,
+        product: {
+          idProduct: productId,
+          storeId: storeId,
+          name: product.productName || product.name,
+          price: product.productPrice || product.price,
+          imageUrl: product.productImageUrl || product.imageUrl,
+        },
+        quantity: 1
+      })).unwrap();
+      
+      alert(`✅ "${product.productName || product.name}" agregado a tu cesta de reserva`);
+    } catch (error) {
+      console.error('Error al agregar producto:', error);
+      alert('❌ Error al agregar el producto. Inténtalo de nuevo.');
+    } finally {
+      setAddingProduct(null);
+    }
+  };
+
+  // Función para agregar todos los productos del outfit
+  const handleAddAllToReservation = async () => {
+    if (!user?.clientId) {
+      alert('Por favor inicia sesión para agregar productos a tu cesta');
+      return;
+    }
+
+    if (!outfit.products || outfit.products.length === 0) {
+      alert('Este outfit no tiene productos');
+      return;
+    }
+
+    setAddingAll(true);
+
+    try {
+      let successCount = 0;
+      // Agregar cada producto secuencialmente
+      for (const product of outfit.products) {
+        const productId = product.productId || product.idProduct || product.id;
+        const storeId = product.storeId || product.idStore;
+
+        if (!productId || !storeId) {
+          console.warn('⚠️ Producto sin ID válido, saltando:', product);
+          continue;
+        }
+
+        await dispatch(addOrUpdateItem({
+          clientId: user.clientId,
+          storeId: storeId,
+          product: {
+            idProduct: productId,
+            storeId: storeId,
+            name: product.productName || product.name,
+            price: product.productPrice || product.price,
+            imageUrl: product.productImageUrl || product.imageUrl,
+          },
+          quantity: 1
+        })).unwrap();
+        
+        successCount++;
+      }
+      
+      if (successCount > 0) {
+        alert(`✅ Outfit: ${successCount} de ${outfit.products.length} prendas agregadas a tu cesta de reserva`);
+        onClose(); // Cerrar el modal después de agregar todo
+      } else {
+        alert('❌ No se pudo agregar ningún producto del outfit');
+      }
+    } catch (error) {
+      console.error('Error al agregar outfit completo:', error);
+      alert('❌ Error al agregar algunos productos. Inténtalo de nuevo.');
+    } finally {
+      setAddingAll(false);
+    }
+  };
 
   return (
     <>
@@ -150,14 +266,18 @@ const OutfitDetailModal = ({ outfit, isOpen, onClose }) => {
                               ${(product.productPrice || product.price || 0).toLocaleString()}
                             </p>
 
-                            {/* Botón de adorno (no hace nada) */}
+                            {/* Botón para agregar a cesta */}
                             <button
-                              className="flex items-center gap-2 bg-gray-300 text-gray-500 px-4 py-2 rounded-lg text-sm font-medium cursor-not-allowed"
-                              disabled
-                              title="Próximamente"
+                              onClick={() => handleAddToReservation(product)}
+                              disabled={addingProduct === (product.productId || product.idProduct)}
+                              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                                addingProduct === (product.productId || product.idProduct)
+                                  ? 'bg-gray-300 text-gray-500 cursor-wait'
+                                  : 'bg-primary-600 text-white hover:bg-primary-700 hover:scale-105'
+                              }`}
                             >
-                              <ShoppingCart className="w-4 h-4" />
-                              Agregar
+                              <Package className="w-4 h-4" />
+                              {addingProduct === (product.productId || product.idProduct) ? 'Agregando...' : 'A Cesta'}
                             </button>
                           </div>
                         </div>
@@ -179,12 +299,18 @@ const OutfitDetailModal = ({ outfit, isOpen, onClose }) => {
             </button>
             
             <button
-              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-gray-300 text-gray-500 px-6 py-3 rounded-lg font-medium cursor-not-allowed"
-              disabled
-              title="Próximamente"
+              onClick={handleAddAllToReservation}
+              disabled={addingAll || !outfit.products || outfit.products.length === 0}
+              className={`w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
+                addingAll
+                  ? 'bg-gray-300 text-gray-500 cursor-wait'
+                  : outfit.products && outfit.products.length > 0
+                    ? 'bg-gradient-to-r from-primary-600 to-purple-600 text-white hover:from-primary-700 hover:to-purple-700 hover:scale-105'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
             >
-              <ShoppingCart className="w-5 h-5" />
-              Agregar Outfit Completo (Próximamente)
+              <Package className="w-5 h-5" />
+              {addingAll ? 'Agregando Outfit...' : `Agregar Outfit Completo (${outfit.products?.length || 0})`}
             </button>
           </div>
         </div>
