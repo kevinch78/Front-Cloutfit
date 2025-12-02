@@ -7,13 +7,6 @@ export const aiService = {
   // Parámetros: message (body), gender y generateImage (query params)
   chatWithAI: async (chatData) => {
     try {
-      // ✅ Obtener token explícitamente para asegurar que se envíe
-      const token = localStorage.getItem('token');
-
-      if (!token) {
-        console.warn('⚠️ No hay token en localStorage. La petición podría fallar.');
-      }
-
       // ✅ Crear query params para gender y generateImage
       const params = new URLSearchParams();
       if (chatData.gender) {
@@ -26,19 +19,23 @@ export const aiService = {
       console.log('📤 Enviando al chat IA:', {
         message: chatData.message,
         gender: chatData.gender,
-        generateImage: chatData.generateImage,
-        hasToken: !!token
+        generateImage: chatData.generateImage
       });
 
-      // ✅ Enviar message en el body, gender y generateImage en URL
-      // Y forzar el header Authorization
+      // ✅ TEMPORALMENTE: No enviar Authorization para que funcione con .permitAll()
       const response = await apiClient.post(
         `${ENDPOINTS.PRODUCTS.CHAT}?${params.toString()}`,
         { message: chatData.message },
         {
           headers: {
-            Authorization: token ? `Bearer ${token}` : undefined
-          }
+            // NO enviar Authorization temporalmente
+            'Content-Type': 'application/json'
+          },
+          // Deshabilitar el interceptor de auth para esta petición
+          transformRequest: [(data, headers) => {
+            delete headers.Authorization;
+            return JSON.stringify(data);
+          }]
         }
       );
 
@@ -47,14 +44,6 @@ export const aiService = {
     } catch (error) {
       console.error('❌ Error in AI chat:', error);
       console.error('❌ Respuesta del servidor:', error.response?.data);
-
-      // Si es 403, es probable que el token haya expirado o no se envió
-      if (error.response?.status === 403) {
-        return {
-          success: false,
-          error: 'Sesión expirada o inválida. Por favor, inicia sesión nuevamente.',
-        };
-      }
 
       return {
         success: false,
