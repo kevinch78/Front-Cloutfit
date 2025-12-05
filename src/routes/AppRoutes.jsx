@@ -15,6 +15,7 @@ import FAQPage from '../pages/public/FAQPage';
 import TermsPage from '../pages/public/TermsPage';
 import PrivacyPage from '../pages/public/PrivacyPage';
 import ContactPage from '../pages/public/ContactPage';
+import UserManualPage from '../pages/public/UserManualPage';
 
 // Client Pages
 import ReservationPage from '../pages/client/ReservationPage';
@@ -50,6 +51,7 @@ const AppRoutes = () => {
       <Route path="/terms" element={<TermsPage />} />
       <Route path="/privacy" element={<PrivacyPage />} />
       <Route path="/contact" element={<ContactPage />} />
+      <Route path="/user-manual" element={<UserManualPage />} />
 
       {/* Client Routes (Any authenticated user) */}
       <Route path="/ai-assistant" element={<AIAssistant />} />

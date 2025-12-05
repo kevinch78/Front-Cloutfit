@@ -22,21 +22,10 @@ export const aiService = {
         generateImage: chatData.generateImage
       });
 
-      // ✅ TEMPORALMENTE: No enviar Authorization para que funcione con .permitAll()
+      // ✅ Enviar message en el body, gender y generateImage en URL
       const response = await apiClient.post(
         `${ENDPOINTS.PRODUCTS.CHAT}?${params.toString()}`,
-        { message: chatData.message },
-        {
-          headers: {
-            // NO enviar Authorization temporalmente
-            'Content-Type': 'application/json'
-          },
-          // Deshabilitar el interceptor de auth para esta petición
-          transformRequest: [(data, headers) => {
-            delete headers.Authorization;
-            return JSON.stringify(data);
-          }]
-        }
+        { message: chatData.message }
       );
 
       console.log('✅ Respuesta del chat IA:', response.data);
@@ -44,7 +33,6 @@ export const aiService = {
     } catch (error) {
       console.error('❌ Error in AI chat:', error);
       console.error('❌ Respuesta del servidor:', error.response?.data);
-
       return {
         success: false,
         error: error.response?.data?.message || 'Error en el chat con IA',
